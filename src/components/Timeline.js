@@ -1,5 +1,5 @@
 import React from "react";
-import { startOfToday, isSameDay, getTime, parse } from "date-fns";
+import { startOfDay, isSameDay, getTime, parse } from "date-fns/esm";
 // import { Link } from "react-router-dom";
 //
 // import Year from "./Year";
@@ -11,11 +11,11 @@ export default class Timeline extends React.Component {
     super(props);
 
     this.state = {
-      today: startOfToday(),
+      today: startOfDay(new Date()),
     };
 
     this.todayRefresher = setInterval(() => {
-      const today = startOfToday();
+      const today = startOfDay(new Date());
 
       if (!isSameDay(today, this.state.today)) {
         this.setState({ today: today });
