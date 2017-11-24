@@ -1,23 +1,27 @@
 import React from "react";
 
 import Toggle from "./Toggle";
-import Menu from "./Menu";
 
 export default class Navigation extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { open: false };
+    this.state = { open: false, Menu: null };
   }
 
-  toggleNavigation = () => this.setState({ open: !this.state.open });
+  toggleNavigation = async () => {
+    this.setState({ open: !this.state.open });
+    const Menu = await import("./Menu");
+    this.setState({ Menu: Menu.default });
+  };
 
   render() {
     const { remoteStorage } = this.props;
     const { open } = this.state;
+    const Menu = this.state.Menu;
 
     return [
-      open && <Menu key="Menu" remoteStorage={remoteStorage} />,
+      open && Menu ? <Menu key="Menu" remoteStorage={remoteStorage} /> : null,
       <Toggle
         key="Toggle"
         open={open}
