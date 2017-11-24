@@ -6,18 +6,16 @@ import { startOfToday, isSameDay } from "date-fns";
 // import Month from "./Month";
 // import Day from "./Day";
 
-const getToday = () => startOfToday();
-
 export default class Timeline extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      today: getToday(),
+      today: startOfToday(),
     };
 
     this.todayRefresher = setInterval(() => {
-      const today = getToday();
+      const today = startOfToday();
 
       if (!isSameDay(today, this.state.today)) {
         this.setState({ today: today });
