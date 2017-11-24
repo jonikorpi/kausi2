@@ -1,5 +1,5 @@
 import React from "react";
-import { startOfToday, isSameDay } from "date-fns";
+import { startOfToday, isSameDay, getTime, parse } from "date-fns";
 // import { Link } from "react-router-dom";
 //
 // import Year from "./Year";
@@ -28,6 +28,13 @@ export default class Timeline extends React.Component {
   }
 
   render() {
-    return "Timeline";
+    const { today } = this.state;
+    const { year, month, day } = this.props.match.params;
+
+    const activeDate = year
+      ? parse(`${year}-${month || 1}-${day || 1}`)
+      : today;
+
+    return getTime(activeDate);
   }
 }
