@@ -68,3 +68,50 @@ body {
   display: flex;
   align-items: center;
 }
+
+.links {
+  display: flex;
+}
+
+.links > * {
+  flex-grow: 1;
+  text-align: center;
+}
+
+.panels {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.panel {
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.panel.active {
+  min-width: 12rem;
+}
+
+.year,
+.month {
+  position: sticky;
+  top: 0;
+}
+
+.month {
+}
+
+.panelContent {
+  max-width: 100vw;
+  min-width: 10rem;
+  outline: 1px solid red;
+}
+
+.days {
+  margin-left: auto;
+}
+
+.panelContent {
+}

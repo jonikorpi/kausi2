@@ -1,7 +1,12 @@
 import React from "react";
 
-const Panel = ({ children, active }) => (
-  <div className={`panel ${active ? "active" : ""}`}>{children}</div>
+const Panel = ({ children, active, name, activatePanel }) => (
+  <div
+    className={`panel ${name} ${active ? "active" : ""}`}
+    onClick={activatePanel}
+  >
+    <div className="panelContent">{children}</div>
+  </div>
 );
 
 export default Panel;

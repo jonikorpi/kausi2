@@ -8,6 +8,6 @@ export default class Day extends React.Component {
   render() {
     const { date } = this.props;
 
-    return format(date, "DD dddd");
+    return <div>{format(date, "DD dddd")}</div>;
   }
 }

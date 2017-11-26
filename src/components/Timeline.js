@@ -20,7 +20,7 @@ export default class Timeline extends React.Component {
 
     this.state = {
       today: startOfDay(new Date()),
-      activePanel: "days",
+      activePanel: "year",
     };
 
     this.todayRefresher = setInterval(() => {
@@ -53,28 +53,36 @@ export default class Timeline extends React.Component {
       <div className="timeline">
         <Links activeDate={activeDate} today={today} />
 
-        <Panel
-          active={activePanel === "year"}
-          activatePanel={() => this.activatePanel("year")}
-        >
-          <Year date={activeDate} />
-        </Panel>
+        <div className="panels">
+          <Panel
+            name="year"
+            active={activePanel === "year"}
+            activatePanel={() => this.activatePanel("year")}
+          >
+            <Year date={activeDate} />
+          </Panel>
 
-        <Panel
-          active={activePanel === "month"}
-          activatePanel={() => this.activatePanel("month")}
-        >
-          <Month date={activeDate} />
-        </Panel>
+          <Panel
+            name="month"
+            active={activePanel === "month"}
+            activatePanel={() => this.activatePanel("month")}
+          >
+            <Month date={activeDate} />
+          </Panel>
 
-        <Panel
-          active={activePanel === "days"}
-          activatePanel={() => this.activatePanel("days")}
-        >
-          {daysInMonth.map((nada, dayNumber) => (
-            <Day key={dayNumber} date={setDate(firstOfMonth, dayNumber + 1)} />
-          ))}
-        </Panel>
+          <Panel
+            name="days"
+            active={activePanel === "days"}
+            activatePanel={() => this.activatePanel("days")}
+          >
+            {daysInMonth.map((nada, dayNumber) => (
+              <Day
+                key={dayNumber}
+                date={setDate(firstOfMonth, dayNumber + 1)}
+              />
+            ))}
+          </Panel>
+        </div>
 
         <Links activeDate={activeDate} today={today} />
       </div>
