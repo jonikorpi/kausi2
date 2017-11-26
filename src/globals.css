@@ -88,36 +88,45 @@ body {
 .panel {
   flex-grow: 1;
   overflow: hidden;
+  background: black;
 }
 
+.panelContent,
 .panel.active {
   min-width: 76.4vw;
 }
 
 @media (min-width: 60em) {
+  .panelContent,
   .panel.active {
     min-width: 0;
   }
 }
 
-.year,
-.month {
+.yearPanel,
+.monthPanel {
   position: sticky;
   top: 0;
-}
-
-.month {
+  height: 100vh;
 }
 
 .panelContent {
   max-width: 100vw;
   min-width: 10rem;
-  outline: 1px solid red;
-}
-
-.days {
-  margin-left: auto;
+  cursor: text;
+  padding: 0.5rem;
 }
 
 .panelContent {
+}
+
+.year,
+.month,
+.day {
+}
+
+.editor {
+  width: 100%;
+  resize: none;
+  background: #222;
 }
