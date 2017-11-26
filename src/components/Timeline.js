@@ -32,7 +32,7 @@ export default class Timeline extends React.Component {
     const { year, month, day } = this.props.match.params;
 
     const activeDate = year
-      ? parse(`${year}/${month || 1}/${day || 1}`, "YYYY/M/D", today)
+      ? parse(`${year}/${month || "01"}/${day || "01"}`, "YYYY/MM/DD", today)
       : today;
 
     return (
