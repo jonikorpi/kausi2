@@ -91,7 +91,13 @@ body {
 }
 
 .panel.active {
-  min-width: 12rem;
+  min-width: 76.4vw;
+}
+
+@media (min-width: 60em) {
+  .panel.active {
+    min-width: 0;
+  }
 }
 
 .year,
