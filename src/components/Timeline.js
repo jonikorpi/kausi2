@@ -1,10 +1,10 @@
 import React from "react";
-import { startOfDay, isSameDay, getTime, parse } from "date-fns/esm";
-// import { Link } from "react-router-dom";
+import { startOfDay, isSameDay, parse } from "date-fns/esm";
 //
 // import Year from "./Year";
 // import Month from "./Month";
 // import Day from "./Day";
+import Links from "./Links";
 
 export default class Timeline extends React.Component {
   constructor(props) {
@@ -32,9 +32,14 @@ export default class Timeline extends React.Component {
     const { year, month, day } = this.props.match.params;
 
     const activeDate = year
-      ? parse(`${year}-${month || 1}-${day || 1}`)
+      ? parse(`${year}/${month || 1}/${day || 1}`, "YYYY/M/D", today)
       : today;
 
-    return getTime(activeDate);
+    return (
+      <div className="timeline">
+        <Links activeDate={activeDate} today={today} />
+        <Links activeDate={activeDate} today={today} />
+      </div>
+    );
   }
 }
