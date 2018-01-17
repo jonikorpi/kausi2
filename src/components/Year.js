@@ -8,10 +8,13 @@ export default class Year extends React.Component {
     const { date } = this.props;
 
     return (
-      <div className="year">
+      <React.Fragment>
         <h1>{format(date, "YYYY")}</h1>
-        <Entry path={`/entries/${format(date, "YYYY")}/year`} />
-      </div>
+        <Entry
+          fillHeight={true}
+          path={`/entries/${format(date, "YYYY")}/year`}
+        />
+      </React.Fragment>
     );
   }
 }

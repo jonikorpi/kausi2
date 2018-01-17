@@ -13,16 +13,15 @@ import Month from "./Month";
 import Day from "./Day";
 import Links from "./Links";
 import Panel from "./Panel";
+import Navigation from "./Navigation";
 
 export default class Timeline extends React.Component {
-  constructor(props) {
-    super(props);
+  state = {
+    today: startOfDay(new Date()),
+    activePanel: "days",
+  };
 
-    this.state = {
-      today: startOfDay(new Date()),
-      activePanel: "year",
-    };
-
+  componentDidMount() {
     this.todayRefresher = setInterval(() => {
       const today = startOfDay(new Date());
 
@@ -50,9 +49,7 @@ export default class Timeline extends React.Component {
     const firstOfMonth = startOfMonth(activeDate);
 
     return (
-      <div className="timeline">
-        <Links activeDate={activeDate} today={today} />
-
+      <React.Fragment>
         <div className="panels">
           <Panel
             name="year"
@@ -84,8 +81,10 @@ export default class Timeline extends React.Component {
           </Panel>
         </div>
 
-        <Links activeDate={activeDate} today={today} />
-      </div>
+        <Navigation {...this.props}>
+          <Links activeDate={activeDate} today={today} />
+        </Navigation>
+      </React.Fragment>
     );
   }
 }

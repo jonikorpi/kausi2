@@ -8,10 +8,13 @@ export default class Month extends React.Component {
     const { date } = this.props;
 
     return (
-      <div className="month">
+      <React.Fragment>
         <h2>{format(date, "MMMM")}</h2>
-        <Entry path={`/entries/${format(date, "YYYY/MM")}/month`} />
-      </div>
+        <Entry
+          fillHeight={true}
+          path={`/entries/${format(date, "YYYY/MM")}/month`}
+        />
+      </React.Fragment>
     );
   }
 }

@@ -16,15 +16,18 @@ export default class Navigation extends React.Component {
   };
 
   render() {
-    const { remoteStorage } = this.props;
+    const { remoteStorage, children } = this.props;
     const { open } = this.state;
     const Menu = this.state.Menu;
 
     return (
-      <React.Fragment>
-        {open && Menu ? <Menu remoteStorage={remoteStorage} /> : null}
-        <Toggle open={open} toggleNavigation={this.toggleNavigation} />,
-      </React.Fragment>
+      <div className="navigation">
+        <div>
+          <Toggle open={open} toggleNavigation={this.toggleNavigation} />
+          {open && Menu ? <Menu remoteStorage={remoteStorage} /> : null}
+        </div>
+        {children}
+      </div>
     );
   }
 }

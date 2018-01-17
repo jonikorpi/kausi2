@@ -1,35 +1,47 @@
-.toggle {
+/* Main elements */
+.navigation {
   position: fixed;
   left: 0.5rem;
   right: 0.5rem;
   bottom: 0.5rem;
+  background-color: #333;
+  border-radius: 0.5rem;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  padding: 0 0.5rem;
 }
 
-.menu {
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  padding: 0.5rem;
-  background: black;
+.panels {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
 }
 
 @supports (padding-top: max(1px, env(safe-area-inset-top))) {
-  .toggle {
+  .navigation {
     left: max(0.5rem, env(safe-area-inset-left));
     right: max(0.5rem, env(safe-area-inset-right));
     bottom: max(0.5rem, env(safe-area-inset-bottom));
   }
 
-  .menu {
-    padding: max(0.5rem, env(safe-area-inset-left))
-      max(0.5rem, env(safe-area-inset-top))
-      max(0.5rem, env(safe-area-inset-right))
-      max(0.5rem, env(safe-area-inset-bottom));
+  .panels {
+    padding-top: max(0, env(safe-area-inset-top));
+    padding-left: max(0, env(safe-area-inset-left));
+    padding-right: max(0, env(safe-area-inset-right));
+    padding-bottom: max(0, env(safe-area-inset-bottom));
   }
+}
+
+/* Navigation */
+.toggle {
+}
+
+.menu {
+  position: absolute;
+  left: 0;
+  bottom: 100%;
+  background: black;
 }
 
 .toggleButton {
@@ -42,21 +54,21 @@
 }
 
 .links > * {
-  flex-grow: 1;
-  text-align: center;
+  padding: 0.5rem 0;
 }
 
-.panels {
-  position: relative;
-  display: flex;
-  align-items: flex-start;
-  width: 100%;
+.links > * + * {
+  margin-left: 0.5rem;
+  padding: 0.5rem 0;
 }
 
+/* Panels */
 .panel {
   flex-grow: 1;
   overflow: hidden;
   background: black;
+  display: flex;
+  flex-direction: column;
 }
 
 .panelContent,
@@ -76,13 +88,17 @@
   position: sticky;
   top: 0;
   height: 100vh;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .panelContent {
   max-width: 100vw;
   min-width: 10rem;
-  cursor: text;
   padding: 0.5rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .panelContent {
@@ -94,16 +110,30 @@
 }
 
 .editor {
-  background: #222;
+  border-top: 1px solid;
   position: relative;
+}
+
+.editor.fillHeight {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .textArea {
   width: 100%;
   resize: none;
+  outline: none;
 }
 
 .label {
   display: block;
   cursor: text;
+}
+
+.labelText {
+}
+
+.editor.fillHeight .label {
+  flex-grow: 1;
 }
