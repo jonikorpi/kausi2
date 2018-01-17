@@ -5153,8 +5153,8 @@ react-dev-utils@^4.2.1:
     text-table "0.2.0"
 
 react-dom@^16.1.1:
-  version "16.1.1"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.1.1.tgz#b2e331b6d752faf1a2d31399969399a41d8d45f8"
+  version "16.2.0"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.2.0.tgz#69003178601c0ca19b709b33a83369fe6124c044"
   dependencies:
     fbjs "^0.8.16"
     loose-envify "^1.1.0"
@@ -5238,8 +5238,8 @@ react-textarea-autosize@^5.2.1:
     prop-types "^15.6.0"
 
 react@^16.1.1:
-  version "16.1.1"
-  resolved "https://registry.yarnpkg.com/react/-/react-16.1.1.tgz#d5c4ef795507e3012282dd51261ff9c0e824fe1f"
+  version "16.2.0"
+  resolved "https://registry.yarnpkg.com/react/-/react-16.2.0.tgz#a31bd2dab89bff65d42134fa187f24d054c273ba"
   dependencies:
     fbjs "^0.8.16"
     loose-envify "^1.1.0"
@@ -5406,12 +5406,12 @@ relateurl@0.2.x:
   resolved "https://registry.yarnpkg.com/relateurl/-/relateurl-0.2.7.tgz#54dbf377e51440aca90a4cd274600d3ff2d888a9"
 
 remotestorage-widget@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/remotestorage-widget/-/remotestorage-widget-1.1.0.tgz#79e60c1bae90cace5a705a1e2127b60265f4eaee"
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/remotestorage-widget/-/remotestorage-widget-1.2.0.tgz#fb7cdbd1fdd06c0d1dba15bc432d3da5cd8efe7d"
 
 remotestoragejs@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/remotestoragejs/-/remotestoragejs-1.0.1.tgz#2bbd1359b40db54aad9a88bdb9a0eff056a15c94"
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/remotestoragejs/-/remotestoragejs-1.0.2.tgz#c6007f6f18a05a50109f7394a5b70a2ab0564502"
   dependencies:
     tv4 "^1.2.7"
     webfinger.js "^2.6.6"
