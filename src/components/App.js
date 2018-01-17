@@ -6,7 +6,7 @@ import Timeline from "./Timeline";
 
 const App = props => (
   <Connection>
-    {remoteStorage => <Timeline {...props} remoteStorage={remoteStorage} />}
+    {remoteStorage => <Timeline {...props} database={remoteStorage} />}
   </Connection>
 );
 

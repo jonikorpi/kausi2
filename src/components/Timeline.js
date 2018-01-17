@@ -6,11 +6,10 @@ import {
   getDaysInMonth,
   setDate,
   startOfMonth,
+  format,
 } from "date-fns/esm";
 
-import Year from "./Year";
-import Month from "./Month";
-import Day from "./Day";
+import Entry from "./Entry";
 import Links from "./Links";
 import Panel from "./Panel";
 import Navigation from "./Navigation";
@@ -42,6 +41,7 @@ export default class Timeline extends React.Component {
 
   render() {
     const { today, activePanel, activeDay } = this.state;
+    const { database } = this.props;
     const { year, month, day } = this.props.match.params;
 
     const activeDate = year
@@ -59,7 +59,11 @@ export default class Timeline extends React.Component {
             active={activePanel === "year"}
             activatePanel={() => this.activatePanel("year")}
           >
-            <Year date={activeDate} />
+            <h1>{format(activeDate, "YYYY")}</h1>
+            <Entry
+              fillHeight={true}
+              path={`/entries/${format(activeDate, "YYYY")}/year`}
+            />
           </Panel>
 
           <Panel
@@ -67,7 +71,11 @@ export default class Timeline extends React.Component {
             active={activePanel === "month"}
             activatePanel={() => this.activatePanel("month")}
           >
-            <Month date={activeDate} />
+            <h2>{format(activeDate, "MMMM")}</h2>
+            <Entry
+              fillHeight={true}
+              path={`/entries/${format(activeDate, "YYYY/MM")}/month`}
+            />
           </Panel>
 
           <Panel
@@ -82,9 +90,26 @@ export default class Timeline extends React.Component {
         </div>
 
         <div className="days">
-          {daysInMonth.map((nada, dayNumber) => (
-            <Day key={dayNumber} date={setDate(firstOfMonth, dayNumber + 1)} />
-          ))}
+          {daysInMonth.map((nada, dayNumber) => {
+            const date = setDate(firstOfMonth, dayNumber + 1);
+
+            return (
+              <div className="day" key={dayNumber}>
+                <h3 className="dayTitle">{format(date, "DD ddd")}</h3>
+                <div className="dayCropper">
+                  <Entry
+                    database={database}
+                    path={`/entries/${format(date, "YYYY/MM/DD")}`}
+                  />
+                  <Entry
+                    database={database}
+                    hideWithoutFocus={true}
+                    path={`/reminders/${format(date, "MM/DD")}`}
+                  />
+                </div>
+              </div>
+            );
+          })}
         </div>
       </React.Fragment>
     );
