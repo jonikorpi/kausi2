@@ -13,17 +13,11 @@ export default class Connection extends React.Component {
   }
 
   render() {
-    return [
-      <Timeline
-        key="Timeline"
-        {...this.props}
-        remoteStorage={this.remoteStorage}
-      />,
-      <Navigation
-        key="Navigation"
-        {...this.props}
-        remoteStorage={this.remoteStorage}
-      />,
-    ];
+    return (
+      <React.Fragment>
+        <Timeline {...this.props} remoteStorage={this.remoteStorage} />
+        <Navigation {...this.props} remoteStorage={this.remoteStorage} />
+      </React.Fragment>
+    );
   }
 }

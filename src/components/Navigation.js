@@ -20,13 +20,11 @@ export default class Navigation extends React.Component {
     const { open } = this.state;
     const Menu = this.state.Menu;
 
-    return [
-      open && Menu ? <Menu key="Menu" remoteStorage={remoteStorage} /> : null,
-      <Toggle
-        key="Toggle"
-        open={open}
-        toggleNavigation={this.toggleNavigation}
-      />,
-    ];
+    return (
+      <React.Fragment>
+        {open && Menu ? <Menu remoteStorage={remoteStorage} /> : null}
+        <Toggle open={open} toggleNavigation={this.toggleNavigation} />,
+      </React.Fragment>
+    );
   }
 }
