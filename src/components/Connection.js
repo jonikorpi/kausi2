@@ -6,6 +6,7 @@ export default class Connection extends React.Component {
     this.remoteStorage = new RemoteStorage({
       logging: process.env.NODE_ENV === "development",
     });
+    // this.remoteStorage.caching.enable("/kausi/");
     this.remoteStorage.access.claim("kausi", "rw");
   }
 
