@@ -6,12 +6,12 @@ import Editor from "./Editor";
 
 export default class Entry extends React.Component {
   updateEntry = event => {
-    console.log(event.nativeEvent.target.value);
+    console.log("Updating entry", event.nativeEvent.target.value);
   };
 
   render() {
     const { path } = this.props;
 
-    return <Editor value={path} updateEntry={this.updateEntry} />;
+    return <Editor id={path} value={""} updateEntry={this.updateEntry} />;
   }
 }

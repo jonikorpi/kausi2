@@ -3,15 +3,21 @@ import Textarea from "react-textarea-autosize";
 
 export default class Editor extends React.Component {
   render() {
-    const { value, updateEntry } = this.props;
+    const { id, value, updateEntry } = this.props;
 
     return (
-      <Textarea
-        className="editor"
-        defaultValue={value}
-        minRows={3}
-        onChange={updateEntry}
-      />
+      <div className="editor">
+        <label className="label" htmlFor={id}>
+          {id}
+        </label>
+        <Textarea
+          id={id}
+          className="textArea"
+          defaultValue={value}
+          minRows={2}
+          onChange={updateEntry}
+        />
+      </div>
     );
   }
 }

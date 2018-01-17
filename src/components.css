@@ -94,7 +94,16 @@
 }
 
 .editor {
+  background: #222;
+  position: relative;
+}
+
+.textArea {
   width: 100%;
   resize: none;
-  background: #222;
+}
+
+.label {
+  display: block;
+  cursor: text;
 }
