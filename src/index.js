@@ -5,6 +5,7 @@ import App from "./components/App";
 
 import "./reset.css";
 import "./globals.css";
+import "./components.css";
 
 ReactDOM.render(<App />, document.getElementById("root"));
 // registerServiceWorker();

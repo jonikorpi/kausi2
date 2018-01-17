@@ -1,0 +1,100 @@
+.toggle {
+  position: fixed;
+  left: 0.5rem;
+  right: 0.5rem;
+  bottom: 0.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  padding: 0.5rem;
+  background: black;
+}
+
+@supports (padding-top: max(1px, env(safe-area-inset-top))) {
+  .toggle {
+    left: max(0.5rem, env(safe-area-inset-left));
+    right: max(0.5rem, env(safe-area-inset-right));
+    bottom: max(0.5rem, env(safe-area-inset-bottom));
+  }
+
+  .menu {
+    padding: max(0.5rem, env(safe-area-inset-left))
+      max(0.5rem, env(safe-area-inset-top))
+      max(0.5rem, env(safe-area-inset-right))
+      max(0.5rem, env(safe-area-inset-bottom));
+  }
+}
+
+.toggleButton {
+  display: flex;
+  align-items: center;
+}
+
+.links {
+  display: flex;
+}
+
+.links > * {
+  flex-grow: 1;
+  text-align: center;
+}
+
+.panels {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.panel {
+  flex-grow: 1;
+  overflow: hidden;
+  background: black;
+}
+
+.panelContent,
+.panel.active {
+  min-width: 76.4vw;
+}
+
+@media (min-width: 60em) {
+  .panelContent,
+  .panel.active {
+    min-width: 0;
+  }
+}
+
+.yearPanel,
+.monthPanel {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.panelContent {
+  max-width: 100vw;
+  min-width: 10rem;
+  cursor: text;
+  padding: 0.5rem;
+}
+
+.panelContent {
+}
+
+.year,
+.month,
+.day {
+}
+
+.editor {
+  width: 100%;
+  resize: none;
+  background: #222;
+}
