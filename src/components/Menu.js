@@ -3,7 +3,7 @@ import Widget from "remotestorage-widget";
 
 export default class Menu extends React.Component {
   componentDidMount() {
-    const widget = new Widget(this.props.remoteStorage);
+    const widget = new Widget(this.props.remoteStorage, { leaveOpen: true });
     widget.attach("widget");
   }
 

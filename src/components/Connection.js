@@ -4,7 +4,7 @@ import RemoteStorage from "remotestoragejs";
 export default class Connection extends React.Component {
   componentWillMount() {
     this.remoteStorage = new RemoteStorage({
-      logging: process.env.NODE_ENV === "development",
+      // logging: process.env.NODE_ENV === "development",
       modules: [
         {
           name: "kausi",
@@ -29,10 +29,15 @@ export default class Connection extends React.Component {
               exports: {
                 updateEntry: entry =>
                   privateClient
-                    .storeObject("entry", entry.path + ".json", entry)
+                    .storeObject("entry", entry.path, entry)
                     .then(entry => entry),
-                getEntry: path =>
-                  privateClient.getObject(path + ".json").then(entry => entry),
+                subscribe: (path, callback) => {
+                  privateClient.on("change", callback);
+                  privateClient.getObject(path);
+                },
+                unsubscribe: (path, callback) => {
+                  privateClient.off("change", callback);
+                },
               },
             };
           },
@@ -46,17 +51,9 @@ export default class Connection extends React.Component {
       dropbox: "0cnw57tenmut8av",
       // googledrive: 'your-client-id'
     });
-
-    this.remoteStorage.kausi
-      .updateEntry({
-        path: "2017/lol",
-        content: "ugh",
-        lastEdited: Date.now(),
-      })
-      .then(entry => console.log(entry));
   }
 
   render() {
-    return this.props.children(this.remoteStorage);
+    return this.props.children(this.remoteStorage, this.remoteStorage.kausi);
   }
 }

@@ -14,10 +14,32 @@ export default class Entry extends React.Component {
   state = { value: null };
 
   componentWillMount() {
-    const { path, database } = this.props;
+    const { database, path } = this.props;
 
-    // database.getObject(path).then(entry => console.log(entry));
+    database.subscribe(path, this.handleDatabase);
+
+    // setTimeout(() => {
+    //   database.updateEntry({
+    //     path: path,
+    //     content: path,
+    //     lastEdited: Date.now(),
+    //   });
+    // }, Math.random() * 10000);
   }
+
+  componentWillUnmount() {
+    const { database, path } = this.props;
+
+    database.unsubscribe(path, this.handleDatabase);
+  }
+
+  handleDatabase = event => {
+    const { path } = this.props;
+
+    if (event.relativePath === path) {
+      console.log(event);
+    }
+  };
 
   updateEntry = event => {
     // // List all items in the "foo/" category/folder
