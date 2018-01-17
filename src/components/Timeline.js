@@ -15,10 +15,13 @@ import Links from "./Links";
 import Panel from "./Panel";
 import Navigation from "./Navigation";
 
+const today = startOfDay(new Date());
+
 export default class Timeline extends React.Component {
   state = {
-    today: startOfDay(new Date()),
+    today: today,
     activePanel: "days",
+    activeDay: today,
   };
 
   componentDidMount() {
@@ -38,7 +41,7 @@ export default class Timeline extends React.Component {
   activatePanel = name => this.setState({ activePanel: name });
 
   render() {
-    const { today, activePanel } = this.state;
+    const { today, activePanel, activeDay } = this.state;
     const { year, month, day } = this.props.match.params;
 
     const activeDate = year
@@ -68,22 +71,21 @@ export default class Timeline extends React.Component {
           </Panel>
 
           <Panel
-            name="days"
-            active={activePanel === "days"}
-            activatePanel={() => this.activatePanel("days")}
+            name="navigation"
+            active={activePanel === "navigation"}
+            activatePanel={() => this.activatePanel("navigation")}
           >
-            {daysInMonth.map((nada, dayNumber) => (
-              <Day
-                key={dayNumber}
-                date={setDate(firstOfMonth, dayNumber + 1)}
-              />
-            ))}
+            <Navigation {...this.props}>
+              <Links activeDate={activeDate} today={today} />
+            </Navigation>
           </Panel>
         </div>
 
-        <Navigation {...this.props}>
-          <Links activeDate={activeDate} today={today} />
-        </Navigation>
+        <div className="days">
+          {daysInMonth.map((nada, dayNumber) => (
+            <Day key={dayNumber} date={setDate(firstOfMonth, dayNumber + 1)} />
+          ))}
+        </div>
       </React.Fragment>
     );
   }

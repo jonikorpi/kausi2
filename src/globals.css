@@ -17,8 +17,9 @@
   http://codepen.io/CrocoDillon/pen/jgmwt?editors=0010 */
 
 html {
-  font-size: 133%; /* Fallback: used if browser doesn't support calc() */
-  font-size: calc(1.14em + 0.2vw + 0.2vh + 0.1vmin);
+  /* font-size: 133%; */
+  /* font-size: calc(1.14em + 0.2vw + 0.2vh + 0.1vmin); */
+  font-size: 150%;
 
   font-family: "IBM Plex Mono", monospace, monospace;
   background-color: black;
@@ -27,6 +28,5 @@ html {
 
 body {
   line-height: 1rem;
-  font-size: 0.8rem; /* = line-height of 1.25 */
+  font-size: 0.666666667rem;
 }
-

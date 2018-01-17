@@ -8,6 +8,7 @@ export default class Entry extends React.Component {
   static defaultProps = {
     path: "/",
     fillHeight: false,
+    hideWithoutFocus: false,
   };
 
   updateEntry = event => {
@@ -15,7 +16,7 @@ export default class Entry extends React.Component {
   };
 
   render() {
-    const { path, fillHeight } = this.props;
+    const { path, fillHeight, hideWithoutFocus } = this.props;
 
     return (
       <Editor

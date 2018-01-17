@@ -9,9 +9,14 @@ export default class Day extends React.Component {
 
     return (
       <div className="day">
-        <h3>{format(date, "DD dddd")}</h3>
-        <Entry path={`/entries/${format(date, "YYYY/MM/DD")}`} />
-        <Entry path={`/reminders/${format(date, "MM/DD")}`} />
+        <h3 className="dayTitle">{format(date, "DD ddd")}</h3>
+        <div className="dayCropper">
+          <Entry path={`/entries/${format(date, "YYYY/MM/DD")}`} />
+          <Entry
+            hideWithoutFocus={true}
+            path={`/reminders/${format(date, "MM/DD")}`}
+          />
+        </div>
       </div>
     );
   }
