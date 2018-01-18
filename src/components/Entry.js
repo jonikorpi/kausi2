@@ -8,7 +8,6 @@ export default class Entry extends React.Component {
   static defaultProps = {
     path: "",
     isActive: true,
-    isToday: false,
     label: "Entry label",
     hideUnlessActive: false,
     hideLabel: false,
@@ -32,18 +31,17 @@ export default class Entry extends React.Component {
 
   render() {
     const {
-      path,
+      query,
       label,
       hideUnlessActive,
       isActive,
-      isToday,
       tabIndex,
       hideLabel,
     } = this.props;
     const { value } = this.state;
 
     return (
-      <Firestore query={database => ({ [path]: database.collection(path) })}>
+      <Firestore query={query}>
         {firestore => {
           return (
             <div

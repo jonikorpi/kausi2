@@ -33,10 +33,25 @@
   z-index: 2;
 }
 
+.day.leapDay {
+  color: var(--error);
+}
+
+.day.today {
+}
+
 .dayTitle {
   padding: 0.5rem 0;
   text-transform: uppercase;
   position: relative;
+}
+
+.day.weekend .dayTitle {
+  font-weight: bold;
+}
+
+.day.today .dayTitle {
+  text-decoration: underline;
 }
 
 .dayCropper {

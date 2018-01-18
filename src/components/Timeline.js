@@ -7,6 +7,8 @@ import {
   setDate,
   startOfMonth,
   format,
+  isWeekend,
+  isLeapYear,
 } from "date-fns/esm";
 
 import Entry from "./Entry";
@@ -78,18 +80,24 @@ export default class Timeline extends React.Component {
           <div className="year">
             <h1>{format(activeDay, "YYYY")}</h1>
             <Entry
-              fillHeight={true}
               label="Yearly"
-              path={`${userID}/yearlyEntries/${format(activeDay, "YYYY")}`}
+              query={database => ({
+                entry: database
+                  .collection(`users/${userID}/yearEntries`)
+                  .doc(format(activeDay, "YYYY")),
+              })}
             />
           </div>
 
           <div className="month">
             <h2>{format(activeDay, "MMMM")}</h2>
             <Entry
-              fillHeight={true}
               label="Monthly entry"
-              path={`${userID}/monthlyEntries/${format(activeDay, "YYYY-MM")}`}
+              query={database => ({
+                entry: database
+                  .collection(`users/${userID}/monthEntries`)
+                  .doc(format(activeDay, "YYYY-MM")),
+              })}
             />
           </div>
 
@@ -103,10 +111,16 @@ export default class Timeline extends React.Component {
             const day = setDate(firstOfMonth, dayNumber + 1);
             const isActive = isSameDay(activeDay, day);
             const isToday = isSameDay(today, day);
+            const isDuringWeekend = isWeekend(day);
+            const isLeapDay = isLeapYear(day) && format(day, "D") === "29";
 
             return (
               <div
-                className={`day ${isActive ? "active" : "notActive"}`}
+                className={`day ${isActive ? "active" : "notActive"} ${
+                  isToday ? "today" : "notToday"
+                } ${isDuringWeekend ? "weekend" : ""} ${
+                  isLeapDay ? "leapDay" : ""
+                }`}
                 id={format(day, "YYYY-MM-DD")}
                 key={dayNumber}
               >
@@ -115,19 +129,25 @@ export default class Timeline extends React.Component {
                   <div className="daySizer">
                     <Entry
                       isActive={isActive}
-                      isToday={isToday}
                       label="This day"
                       hideLabel={true}
-                      path={`${userID}/entries/${format(day, "YYYY-MM-DD")}`}
+                      query={database => ({
+                        entry: database
+                          .collection(`users/${userID}/dayEntries`)
+                          .doc(format(day, "YYYY-MM-DD")),
+                      })}
                       onFocus={this.activateDay}
                       onFocusData={day}
                     />
                     <Entry
                       isActive={isActive}
-                      isToday={isToday}
                       label={`Every ${format(day, "dddd")}`}
                       hideUnlessActive={true}
-                      path={`${userID}/weeklies/${format(day, "dddd")}`}
+                      query={database => ({
+                        entry: database
+                          .collection(`users/${userID}/weeklies`)
+                          .doc(format(day, "dddd")),
+                      })}
                       onFocus={this.activateDay}
                       onFocusData={day}
                       tabIndex={-1}
@@ -135,10 +155,13 @@ export default class Timeline extends React.Component {
                     {format(day, "DD") < 29 && (
                       <Entry
                         isActive={isActive}
-                        isToday={isToday}
-                        label={`Every ${format(day, "DDDo")}`}
+                        label={`Every ${format(day, "Do")}`}
                         hideUnlessActive={true}
-                        path={`${userID}/monthlies/${format(day, "DD")}`}
+                        query={database => ({
+                          entry: database
+                            .collection(`users/${userID}/monthlies`)
+                            .doc(format(day, "DD")),
+                        })}
                         onFocus={this.activateDay}
                         onFocusData={day}
                         tabIndex={-1}
@@ -147,9 +170,17 @@ export default class Timeline extends React.Component {
                     <Entry
                       isActive={isActive}
                       isToday={isToday}
-                      label={`Every year on ${format(day, "MMM DDDo")}`}
+                      label={
+                        isLeapDay
+                          ? "Every leap year on leap day"
+                          : `Every year on ${format(day, "MMM Do")}`
+                      }
                       hideUnlessActive={true}
-                      path={`${userID}/yearlies/${format(day, "MM-DD")}`}
+                      query={database => ({
+                        entry: database
+                          .collection(`users/${userID}/yearlies`)
+                          .doc(format(day, "MM-DD")),
+                      })}
                       onFocus={this.activateDay}
                       onFocusData={day}
                       tabIndex={-1}

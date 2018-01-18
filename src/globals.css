@@ -19,6 +19,7 @@
 html {
   --aside: hsl(0, 0%, 61.8%);
   --body: white;
+  --error: hsl(20, 100%, 61.8%);
   --background: black;
 
   /* font-size: 133%; */
