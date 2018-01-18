@@ -11,8 +11,6 @@ import {
 
 import Entry from "./Entry";
 import Links from "./Links";
-import Panel from "./Panel";
-import Navigation from "./Navigation";
 
 const today = startOfDay(new Date());
 
@@ -20,7 +18,6 @@ export default class Timeline extends React.Component {
   state = {
     today: today,
     activePanel: "days",
-    activeDay: today,
   };
 
   componentDidMount() {
@@ -38,72 +35,91 @@ export default class Timeline extends React.Component {
   }
 
   activatePanel = name => this.setState({ activePanel: name });
+  activateDay = day => {
+    this.props.history.replace(`/${format(day, "YYYY/MM/DD")}`);
+  };
 
   render() {
-    const { today, activePanel, activeDay } = this.state;
+    const { today, activePanel } = this.state;
     const { userID, isAnonymous } = this.props;
     const { year, month, day } = this.props.match.params;
 
-    const activeDate = year
+    const activeDay = year
       ? parse(`${year}/${month || "01"}/${day || "01"}`, "YYYY/MM/DD", today)
       : today;
 
-    const daysInMonth = [...Array(getDaysInMonth(activeDate))];
-    const firstOfMonth = startOfMonth(activeDate);
+    const daysInMonth = [...Array(getDaysInMonth(activeDay))];
+    const firstOfMonth = startOfMonth(activeDay);
 
     return (
       <React.Fragment>
         <div className="panels">
-          <Panel
-            name="year"
-            active={activePanel === "year"}
-            activatePanel={() => this.activatePanel("year")}
-          >
-            <h1>{format(activeDate, "YYYY")}</h1>
+          <div className="year">
+            <h1>{format(activeDay, "YYYY")}</h1>
             <Entry
               fillHeight={true}
-              path={`${userID}/yearlyEntries/${format(activeDate, "YYYY")}`}
+              label="Yearly"
+              path={`${userID}/yearlyEntries/${format(activeDay, "YYYY")}`}
             />
-          </Panel>
+          </div>
 
-          <Panel
-            name="month"
-            active={activePanel === "month"}
-            activatePanel={() => this.activatePanel("month")}
-          >
-            <h2>{format(activeDate, "MMMM")}</h2>
+          <div className="month">
+            <h2>{format(activeDay, "MMMM")}</h2>
             <Entry
               fillHeight={true}
-              path={`${userID}/monthlyEntries/${format(activeDate, "YYYY-MM")}`}
+              label="Monthly entry"
+              path={`${userID}/monthlyEntries/${format(activeDay, "YYYY-MM")}`}
             />
-          </Panel>
+          </div>
 
-          <Panel
-            name="navigation"
-            active={activePanel === "navigation"}
-            activatePanel={() => this.activatePanel("navigation")}
-          >
-            <Navigation {...this.props}>
-              <Links activeDate={activeDate} today={today} />
-            </Navigation>
-          </Panel>
+          <div className="navigation">
+            <Links />
+          </div>
         </div>
 
         <div className="days">
           {daysInMonth.map((nada, dayNumber) => {
-            const date = setDate(firstOfMonth, dayNumber + 1);
+            const day = setDate(firstOfMonth, dayNumber + 1);
+            const isActive = isSameDay(activeDay, day);
+            const isToday = isSameDay(today, day);
 
             return (
-              <div className="day" key={dayNumber}>
-                <h3 className="dayTitle">{format(date, "DD ddd")}</h3>
+              <div
+                className={`day ${isActive ? "active" : "notActive"}`}
+                key={dayNumber}
+              >
+                <h3 className="dayTitle">{format(day, "DD ddd")}</h3>
                 <div className="dayCropper">
-                  <Entry
-                    path={`${userID}/entries/${format(date, "YYYY-MM-DD")}`}
-                  />
-                  <Entry
-                    hideWithoutFocus={true}
-                    path={`${userID}/reminders/${format(date, "MM-DD")}`}
-                  />
+                  <div className="daySizer">
+                    <Entry
+                      isActive={isActive}
+                      isToday={isToday}
+                      label="This day"
+                      path={`${userID}/entries/${format(day, "YYYY-MM-DD")}`}
+                      onFocus={this.activateDay}
+                      onFocusData={day}
+                    />
+                    <Entry
+                      isActive={isActive}
+                      isToday={isToday}
+                      label={`Every ${format(day, "dddd")}`}
+                      hideUnlessActive={true}
+                      path={`${userID}/weeklies/${format(day, "dddd")}`}
+                      onFocus={this.activateDay}
+                      onFocusData={day}
+                      tabIndex={-1}
+                    />
+                    <Entry
+                      isActive={isActive}
+                      isToday={isToday}
+                      label={`Every ${format(day, "DDDo")}`}
+                      hideUnlessActive={true}
+                      path={`${userID}/monthlies/${format(day, "MM-DD")}`}
+                      onFocus={this.activateDay}
+                      onFocusData={day}
+                      tabIndex={-1}
+                    />
+                  </div>
                 </div>
               </div>
             );

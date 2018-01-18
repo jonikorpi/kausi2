@@ -1,44 +1,65 @@
 .days {
   display: flex;
   align-items: flex-start;
+  padding-left: 0.5rem;
+}
+
+.days > *:last-child {
+  padding-right: 0.5rem;
+}
+
+@supports (padding-top: max(1px, env(safe-area-inset-top))) {
+  .days {
+    padding-top: max(0, env(safe-area-inset-top));
+    padding-bottom: max(0, env(safe-area-inset-bottom));
+    padding-left: max(0.5rem, env(safe-area-inset-left));
+  }
+
+  .days > *:last-child {
+    padding-right: max(0.5rem, env(safe-area-inset-right));
+  }
 }
 
 .day {
   width: 4rem;
+  position: relative;
+  margin-right: -1px;
 }
 
-.day:focus-within {
+.day.active {
   width: auto;
-}
-
-.dayCropper {
-  overflow: hidden;
-  border-left: 1px solid;
-  border-right: 1px solid;
+  color: var(--body);
+  z-index: 2;
 }
 
 .dayTitle {
   padding: 0.25rem 0;
   text-transform: uppercase;
+  position: relative;
+}
+
+.dayCropper {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid;
+}
+
+.daySizer {
+  width: 24rem;
+  max-width: 91vw;
 }
 
 .editor {
-  position: relative;
-  border-top: 1px solid;
-  border-bottom: 1px solid;
-  width: 24rem;
-  max-width: 100vw;
   padding: 0.5rem;
+  overflow: hidden;
+}
+
+.editor.notVisible {
+  display: none;
 }
 
 .editor + .editor {
-  border-top: none;
-}
-
-.editor.fillHeight {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
+  border-top: 1px dashed;
 }
 
 .textArea {
@@ -54,6 +75,9 @@
 
 .labelText {
   position: absolute;
+  font-style: italic;
+  color: var(--aside);
+  pointer-events: none;
 }
 
 .labelText.notVisible {
