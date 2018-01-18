@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import firebase from "firebase/app";
+import "firebase/firestore";
 // import registerServiceWorker from "./registerServiceWorker";
 
 import App from "./components/App";
@@ -18,5 +19,18 @@ firebase.initializeApp({
   messagingSenderId: "373784324590",
 });
 
-ReactDOM.render(<App />, document.getElementById("root"));
+firebase
+  .firestore()
+  .enablePersistence()
+  .then(() => {
+    ReactDOM.render(<App />, document.getElementById("root"));
+  })
+  .catch(error => {
+    if (error.code === "failed-precondition") {
+      console.warn("Offline mode only works in one tab at a time.");
+    } else if (error.code === "unimplemented") {
+      console.warn("Browser doesn't support offline mode.");
+    }
+  });
+
 // registerServiceWorker();

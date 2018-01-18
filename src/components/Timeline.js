@@ -61,9 +61,8 @@ export default class Timeline extends React.Component {
           >
             <h1>{format(activeDate, "YYYY")}</h1>
             <Entry
-              userID={userID}
               fillHeight={true}
-              path={`entries/${format(activeDate, "YYYY")}/year.json`}
+              path={`${userID}/yearlyEntries/${format(activeDate, "YYYY")}`}
             />
           </Panel>
 
@@ -74,9 +73,8 @@ export default class Timeline extends React.Component {
           >
             <h2>{format(activeDate, "MMMM")}</h2>
             <Entry
-              userID={userID}
               fillHeight={true}
-              path={`entries/${format(activeDate, "YYYY/MM")}/month.json`}
+              path={`${userID}/monthlyEntries/${format(activeDate, "YYYY-MM")}`}
             />
           </Panel>
 
@@ -100,13 +98,11 @@ export default class Timeline extends React.Component {
                 <h3 className="dayTitle">{format(date, "DD ddd")}</h3>
                 <div className="dayCropper">
                   <Entry
-                    userID={userID}
-                    path={`entries/${format(date, "YYYY/MM/DD")}.json`}
+                    path={`${userID}/entries/${format(date, "YYYY-MM-DD")}`}
                   />
                   <Entry
-                    userID={userID}
                     hideWithoutFocus={true}
-                    path={`reminders/${format(date, "MM/DD")}.json`}
+                    path={`${userID}/reminders/${format(date, "MM-DD")}`}
                   />
                 </div>
               </div>

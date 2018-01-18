@@ -2,91 +2,41 @@ import React from "react";
 import firebase from "firebase/app";
 import "firebase/firestore";
 
-export default class Firebase extends React.Component {
+export default class Firestore extends React.Component {
+  state = {};
+  results = {};
+  db = firebase.firestore();
+
+  componentWillMount() {
+    const queryMap = this.props.query(this.db);
+
+    for (var key in queryMap) {
+      this.results[key] = {
+        loading: true,
+        snapshot: null,
+      };
+
+      this.results[key].unsubscribe = queryMap[key].onSnapshot(snapshot => {
+        this.setState({
+          [key]: {
+            snapshot: snapshot,
+          },
+        });
+      });
+    }
+
+    this.setState(this.results);
+  }
+
+  componentWillUnmount() {
+    for (var i in this.results) {
+      this.results[i].unsubscribe();
+    }
+  }
+
   render() {
-    return this.props.children(this.props.firebase);
+    const { children, query, ...props } = this.props;
+
+    return children(this.state, props);
   }
 }
-
-// export default connect(
-//   (props, ref) => props.query || {},
-//   (props, firebase) => {
-//     return { ...props, firebase: firebase };
-//   }
-// )(Firebase);
-
-// import * as React from "react";
-// import * as firebase from "firebase";
-//
-// export interface QueryMap {
-//   [key: string]: firebase.firestore.Query;
-// }
-//
-// export function createContainer(
-//   WrappedComponent: any,
-//   queryMapFn: (db: any) => QueryMap
-// ) {
-//   return class extends React.Component<any, any> {
-//     results: any;
-//
-//     constructor(props: any) {
-//       super(props);
-//       this.state = {};
-//     }
-//
-//     componentWillMount() {
-//       let db = firebase.firestore();
-//       let queryMap: QueryMap = queryMapFn(db);
-//
-//       this.results = {};
-//
-//       for (var key in queryMap) {
-//         this.results[key] = {
-//           loading: true,
-//           promise: queryMap[key].get(),
-//           snapshot: null
-//         };
-//
-//         this.results[key].unsubscribe = queryMap[key].onSnapshot(snapshot => {
-//           this.setState({
-//             results: {
-//               [key]: {
-//                 snapshot: snapshot
-//               }
-//             }
-//           });
-//         });
-//
-//         this.results[key].promise.then((snapshot: any) => {
-//           this.setState({
-//             results: {
-//               [key]: {
-//                 loading: false,
-//                 snapshot: snapshot
-//               }
-//             }
-//           });
-//         });
-//       }
-//
-//       this.setState({
-//         results: this.results
-//       });
-//     }
-//
-//     componentWillUnmount() {
-//       for (var i in this.results) {
-//         this.results[i].unsubscribe();
-//       }
-//     }
-//
-//     render(): any {
-//       return React.createElement(WrappedComponent, {
-//         ...this.state.results,
-//         ...this.props
-//       });
-//     }
-//   };
-// }
-//
-// export default createContainer;

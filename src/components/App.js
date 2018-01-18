@@ -5,7 +5,9 @@ import FirebaseUser from "./FirebaseUser";
 import Timeline from "./Timeline";
 
 const App = props => (
-  <FirebaseUser>{user => <Timeline {...props} {...user} />}</FirebaseUser>
+  <FirebaseUser>
+    {user => (user.userID ? <Timeline {...props} {...user} /> : null)}
+  </FirebaseUser>
 );
 
 export default () => (
