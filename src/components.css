@@ -53,11 +53,11 @@
 }
 
 .labelText {
-  visibility: hidden;
+  position: absolute;
 }
 
-.day:focus-within .labelText {
-  visibility: visible;
+.labelText.notVisible {
+  visibility: hidden;
 }
 
 .editor.fillHeight .label {
