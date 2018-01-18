@@ -41,7 +41,7 @@ export default class Timeline extends React.Component {
 
   render() {
     const { today, activePanel, activeDay } = this.state;
-    const { database, remoteStorage } = this.props;
+    const { userID, isAnonymous } = this.props;
     const { year, month, day } = this.props.match.params;
 
     const activeDate = year
@@ -61,7 +61,7 @@ export default class Timeline extends React.Component {
           >
             <h1>{format(activeDate, "YYYY")}</h1>
             <Entry
-              database={database}
+              userID={userID}
               fillHeight={true}
               path={`entries/${format(activeDate, "YYYY")}/year.json`}
             />
@@ -74,7 +74,7 @@ export default class Timeline extends React.Component {
           >
             <h2>{format(activeDate, "MMMM")}</h2>
             <Entry
-              database={database}
+              userID={userID}
               fillHeight={true}
               path={`entries/${format(activeDate, "YYYY/MM")}/month.json`}
             />
@@ -100,11 +100,11 @@ export default class Timeline extends React.Component {
                 <h3 className="dayTitle">{format(date, "DD ddd")}</h3>
                 <div className="dayCropper">
                   <Entry
-                    database={database}
+                    userID={userID}
                     path={`entries/${format(date, "YYYY/MM/DD")}.json`}
                   />
                   <Entry
-                    database={database}
+                    userID={userID}
                     hideWithoutFocus={true}
                     path={`reminders/${format(date, "MM/DD")}.json`}
                   />

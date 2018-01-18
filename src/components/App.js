@@ -1,15 +1,11 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-import Connection from "./Connection";
+import FirebaseUser from "./FirebaseUser";
 import Timeline from "./Timeline";
 
 const App = props => (
-  <Connection>
-    {(remoteStorage, database) => (
-      <Timeline {...props} remoteStorage={remoteStorage} database={database} />
-    )}
-  </Connection>
+  <FirebaseUser>{user => <Timeline {...props} {...user} />}</FirebaseUser>
 );
 
 export default () => (
