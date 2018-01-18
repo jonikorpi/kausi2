@@ -28,6 +28,8 @@ export default class Timeline extends React.Component {
         this.setState({ today: today });
       }
     }, 10000);
+
+    this.centerViewport();
   }
 
   componentWillUnmount() {
@@ -37,6 +39,25 @@ export default class Timeline extends React.Component {
   activatePanel = name => this.setState({ activePanel: name });
   activateDay = day => {
     this.props.history.replace(`/${format(day, "YYYY/MM/DD")}`);
+  };
+
+  componentDidUpdate() {
+    this.centerViewport();
+  }
+
+  centerViewport = () => {
+    const { today } = this.state;
+    const { year, month, day } = this.props.match.params;
+    const activeDay = year
+      ? parse(`${year}/${month || "01"}/${day || "01"}`, "YYYY/MM/DD", today)
+      : today;
+
+    const element = document.getElementById(format(activeDay, "YYYY-MM-DD"));
+    const elementRect = element.getBoundingClientRect();
+    const absoluteElementLeft =
+      elementRect.left + window.pageXOffset + elementRect.width / 2;
+    const middle = absoluteElementLeft - window.innerWidth / 2;
+    window.scrollTo(middle, 0);
   };
 
   render() {
@@ -86,6 +107,7 @@ export default class Timeline extends React.Component {
             return (
               <div
                 className={`day ${isActive ? "active" : "notActive"}`}
+                id={format(day, "YYYY-MM-DD")}
                 key={dayNumber}
               >
                 <h3 className="dayTitle">{format(day, "DD ddd")}</h3>
