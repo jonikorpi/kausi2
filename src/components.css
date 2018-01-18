@@ -34,30 +34,24 @@
 }
 
 .dayTitle {
-  padding: 0.25rem 0;
+  padding: 0.5rem 0;
   text-transform: uppercase;
   position: relative;
 }
 
 .dayCropper {
   position: relative;
-  overflow: hidden;
   border: 1px solid;
+  background: var(--background);
+  overflow: hidden;
 }
 
 .daySizer {
   width: 24rem;
-  max-width: calc(100vw - 1rem);
+  max-width: calc(100vw - 2px);
 }
 
 .editor {
-  padding: 0.5rem;
-  overflow: hidden;
-  max-height: 33vh;
-}
-
-.day.active .editor {
-  max-height: none;
 }
 
 .editor.notVisible {
@@ -65,7 +59,7 @@
 }
 
 .editor + .editor {
-  border-top: 1px dashed;
+  border-top: 1px solid;
 }
 
 .textArea {
@@ -77,21 +71,37 @@
 .label {
   display: block;
   cursor: text;
+  position: relative;
 }
 
 .labelText {
   position: absolute;
-  font-style: italic;
+  top: -0.25rem;
+  left: 0.375rem;
+  padding: 0 0.125rem;
+  font-size: 0.586rem;
+  line-height: 0.5rem;
+  text-transform: uppercase;
   color: var(--aside);
+  background: var(--background);
   pointer-events: none;
 }
 
 .labelText.notVisible {
-  visibility: hidden;
+  display: none;
 }
 
 .editor.fillHeight .label {
   flex-grow: 1;
+}
+
+.textArea {
+  max-height: 50vh;
+  padding: 0.75rem 0.5rem;
+}
+
+.day.active .textArea {
+  max-height: none;
 }
 
 .panels {

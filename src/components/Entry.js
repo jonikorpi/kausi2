@@ -11,6 +11,7 @@ export default class Entry extends React.Component {
     isToday: false,
     label: "Entry label",
     hideUnlessActive: false,
+    hideLabel: false,
     onFocus: () => {},
     onFocusData: null,
     tabIndex: undefined,
@@ -37,6 +38,7 @@ export default class Entry extends React.Component {
       isActive,
       isToday,
       tabIndex,
+      hideLabel,
     } = this.props;
     const { value } = this.state;
 
@@ -52,7 +54,7 @@ export default class Entry extends React.Component {
               <label className="label">
                 <div
                   className={`labelText ${
-                    value || !isActive ? "notVisible" : "visible"
+                    hideLabel || !isActive ? "notVisible" : "visible"
                   }`}
                 >
                   {label}

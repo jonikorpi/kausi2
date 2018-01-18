@@ -15,7 +15,7 @@ const Links = ({ today, activeDate }) => {
   return (
     <nav className="links">
       <Link to={format(lastOfLastMonth, "/YYYY/MM/DD")}>Last month</Link>
-      <Link to={format(today, "/YYYY/MM/DD")}>Today</Link>
+      <Link to="/">Today</Link>
       <Link to={format(firstOfNextMonth, "/YYYY/MM/DD")}>Next month</Link>
     </nav>
   );

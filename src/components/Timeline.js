@@ -117,6 +117,7 @@ export default class Timeline extends React.Component {
                       isActive={isActive}
                       isToday={isToday}
                       label="This day"
+                      hideLabel={true}
                       path={`${userID}/entries/${format(day, "YYYY-MM-DD")}`}
                       onFocus={this.activateDay}
                       onFocusData={day}
@@ -131,12 +132,24 @@ export default class Timeline extends React.Component {
                       onFocusData={day}
                       tabIndex={-1}
                     />
+                    {format(day, "DD") < 29 && (
+                      <Entry
+                        isActive={isActive}
+                        isToday={isToday}
+                        label={`Every ${format(day, "DDDo")}`}
+                        hideUnlessActive={true}
+                        path={`${userID}/monthlies/${format(day, "DD")}`}
+                        onFocus={this.activateDay}
+                        onFocusData={day}
+                        tabIndex={-1}
+                      />
+                    )}
                     <Entry
                       isActive={isActive}
                       isToday={isToday}
-                      label={`Every ${format(day, "DDDo")}`}
+                      label={`Every year on ${format(day, "MMM DDDo")}`}
                       hideUnlessActive={true}
-                      path={`${userID}/monthlies/${format(day, "MM-DD")}`}
+                      path={`${userID}/yearlies/${format(day, "MM-DD")}`}
                       onFocus={this.activateDay}
                       onFocusData={day}
                       tabIndex={-1}
