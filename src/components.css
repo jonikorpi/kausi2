@@ -37,6 +37,11 @@
   color: var(--error);
 }
 
+.day.weekday + .day.weekend,
+.day.weekend + .day.weekday {
+  margin-left: 1rem;
+}
+
 .day.today {
 }
 
@@ -47,7 +52,6 @@
 }
 
 .day.weekend .dayTitle {
-  font-weight: bold;
 }
 
 .day.today .dayTitle {

@@ -142,7 +142,7 @@ export default class Timeline extends React.Component {
               <div
                 className={`day ${isActive ? "active" : "notActive"} ${
                   isToday ? "today" : "notToday"
-                } ${isDuringWeekend ? "weekend" : ""} ${
+                } ${isDuringWeekend ? "weekend" : "weekday"} ${
                   isLeapDay ? "leapDay" : ""
                 }`}
                 id={format(day, "YYYY-MM-DD")}
