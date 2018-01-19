@@ -12,6 +12,7 @@ import {
 } from "date-fns/esm";
 
 import Entry from "./Entry";
+import Firestore from "./Firestore";
 import Links from "./Links";
 
 const today = startOfDay(new Date());
@@ -79,26 +80,49 @@ export default class Timeline extends React.Component {
         <div className="panels">
           <div className="year">
             <h1>{format(activeDay, "YYYY")}</h1>
-            <Entry
-              label="Yearly"
+            <Firestore
               query={database => ({
                 entry: database
                   .collection(`users/${userID}/yearEntries`)
                   .doc(format(activeDay, "YYYY")),
               })}
-            />
+            >
+              {({ entry }) => (
+                <Entry
+                  label="Yearly entry"
+                  loading={entry.loading}
+                  data={
+                    entry.snapshot && entry.snapshot.exists
+                      ? entry.snapshot.data()
+                      : null
+                  }
+                  reference={entry.reference}
+                />
+              )}
+            </Firestore>
           </div>
 
           <div className="month">
-            <h2>{format(activeDay, "MMMM")}</h2>
-            <Entry
-              label="Monthly entry"
+            <Firestore
               query={database => ({
                 entry: database
                   .collection(`users/${userID}/monthEntries`)
                   .doc(format(activeDay, "YYYY-MM")),
               })}
-            />
+            >
+              {({ entry }) => (
+                <Entry
+                  label="Monthly entry"
+                  loading={entry.loading}
+                  data={
+                    entry.snapshot && entry.snapshot.exists
+                      ? entry.snapshot.data()
+                      : null
+                  }
+                  reference={entry.reference}
+                />
+              )}
+            </Firestore>
           </div>
 
           <div className="navigation">
@@ -127,64 +151,115 @@ export default class Timeline extends React.Component {
                 <h3 className="dayTitle">{format(day, "DD ddd")}</h3>
                 <div className="dayCropper">
                   <div className="daySizer">
-                    <Entry
-                      isActive={isActive}
-                      label="This day"
-                      hideLabel={true}
+                    <Firestore
                       query={database => ({
                         entry: database
                           .collection(`users/${userID}/dayEntries`)
                           .doc(format(day, "YYYY-MM-DD")),
                       })}
-                      onFocus={this.activateDay}
-                      onFocusData={day}
-                    />
-                    <Entry
-                      isActive={isActive}
-                      label={`Every ${format(day, "dddd")}`}
-                      hideUnlessActive={true}
+                    >
+                      {({ entry }) => (
+                        <Entry
+                          isActive={isActive}
+                          label="This day"
+                          hideLabel={true}
+                          onFocus={this.activateDay}
+                          onFocusData={day}
+                          loading={entry.loading}
+                          data={
+                            entry.snapshot && entry.snapshot.exists
+                              ? entry.snapshot.data()
+                              : null
+                          }
+                          reference={entry.reference}
+                        />
+                      )}
+                    </Firestore>
+
+                    <Firestore
                       query={database => ({
                         entry: database
                           .collection(`users/${userID}/weeklies`)
                           .doc(format(day, "dddd")),
                       })}
-                      onFocus={this.activateDay}
-                      onFocusData={day}
-                      tabIndex={-1}
-                    />
+                    >
+                      {({ entry }) => (
+                        <Entry
+                          isActive={isActive}
+                          label={`Every ${format(day, "dddd")}`}
+                          hideUnlessActive={true}
+                          onFocus={this.activateDay}
+                          onFocusData={day}
+                          tabIndex={-1}
+                          loading={entry.loading}
+                          data={
+                            entry.snapshot && entry.snapshot.exists
+                              ? entry.snapshot.data()
+                              : null
+                          }
+                          reference={entry.reference}
+                        />
+                      )}
+                    </Firestore>
+
                     {format(day, "DD") < 29 && (
-                      <Entry
-                        isActive={isActive}
-                        label={`Every ${format(day, "Do")}`}
-                        hideUnlessActive={true}
+                      <Firestore
                         query={database => ({
                           entry: database
                             .collection(`users/${userID}/monthlies`)
                             .doc(format(day, "DD")),
                         })}
-                        onFocus={this.activateDay}
-                        onFocusData={day}
-                        tabIndex={-1}
-                      />
+                      >
+                        {({ entry }) => (
+                          <Entry
+                            isActive={isActive}
+                            label={`Every ${format(day, "Do")}`}
+                            hideUnlessActive={true}
+                            onFocus={this.activateDay}
+                            onFocusData={day}
+                            tabIndex={-1}
+                            loading={entry.loading}
+                            data={
+                              entry.snapshot && entry.snapshot.exists
+                                ? entry.snapshot.data()
+                                : null
+                            }
+                            reference={entry.reference}
+                          />
+                        )}
+                      </Firestore>
                     )}
-                    <Entry
-                      isActive={isActive}
-                      isToday={isToday}
-                      label={
-                        isLeapDay
-                          ? "Every leap year on leap day"
-                          : `Every year on ${format(day, "MMM Do")}`
-                      }
-                      hideUnlessActive={true}
+
+                    <Firestore
                       query={database => ({
                         entry: database
                           .collection(`users/${userID}/yearlies`)
                           .doc(format(day, "MM-DD")),
                       })}
-                      onFocus={this.activateDay}
-                      onFocusData={day}
-                      tabIndex={-1}
-                    />
+                    >
+                      {({ entry }) => (
+                        <Entry
+                          isActive={isActive}
+                          isToday={isToday}
+                          label={
+                            isLeapDay
+                              ? "Every leap year on leap day"
+                              : `Every year on ${format(day, "MMM Do")}`
+                          }
+                          hideUnlessActive={true}
+                          onFocus={this.activateDay}
+                          onFocusData={day}
+                          tabIndex={-1}
+                          loading={entry.loading}
+                          data={
+                            entry.snapshot && entry.snapshot.exists
+                              ? entry.snapshot.data()
+                              : null
+                          }
+                          reference={entry.reference}
+                        />
+                      )}
+                    </Firestore>
                   </div>
                 </div>
               </div>

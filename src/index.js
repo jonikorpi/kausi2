@@ -31,6 +31,8 @@ firebase
     } else if (error.code === "unimplemented") {
       console.warn("Browser doesn't support offline mode.");
     }
+
+    ReactDOM.render(<App />, document.getElementById("root"));
   });
 
 // registerServiceWorker();

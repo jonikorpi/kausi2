@@ -14,11 +14,14 @@ export default class Firestore extends React.Component {
       this.results[key] = {
         loading: true,
         snapshot: null,
+        reference: queryMap[key],
       };
 
       this.results[key].unsubscribe = queryMap[key].onSnapshot(snapshot => {
         this.setState({
           [key]: {
+            ...this.state[key],
+            loading: false,
             snapshot: snapshot,
           },
         });
