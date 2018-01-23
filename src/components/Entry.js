@@ -61,13 +61,14 @@ export default class Entry extends React.Component {
       tabIndex,
       hideLabel,
       loading,
+      data,
     } = this.props;
     const { value } = this.state;
 
     return (
       <div
         className={`editor ${
-          hideUnlessActive && !isActive ? "notVisible" : "visible"
+          hideUnlessActive && !isActive && !data ? "notVisible" : "visible"
         }`}
       >
         <label className="label">
