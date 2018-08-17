@@ -1,0 +1,64 @@
+html {
+  font-size: 150%;
+  color: white;
+  background-color: #222;
+}
+
+body {
+  line-height: 1rem;
+  font-size: 0.75rem;
+}
+
+.panels {
+}
+
+.panel {
+  background-color: #333;
+  position: relative;
+  width: 80vw;
+  max-width: 30rem;
+  padding: 0.5rem;
+  min-height: 100vh;
+  box-shadow: 0 0 3rem black;
+}
+
+.panel:nth-child(1) {
+  left: 0;
+}
+
+.panel:nth-child(2) {
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  z-index: 1;
+}
+
+.panel:nth-child(3) {
+  right: 0;
+  margin: 0 0 0 auto;
+}
+
+.panel.active {
+  z-index: 2;
+}
+
+.panel.inactive {
+  position: fixed;
+  top: 0;
+  color: grey;
+}
+
+.panel > * + * {
+  margin-top: 1rem;
+}
+
+h1 {
+  font-weight: bold;
+}
+
+textarea {
+  width: 100%;
+  border-top: 1px solid;
+  resize: none;
+  font-family: monospace, monospace;
+}

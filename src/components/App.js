@@ -1,22 +1,39 @@
-import React from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import React, { Component } from "react";
+import Textarea from "react-textarea-autosize";
 
-import FirebaseUser from "./FirebaseUser";
-import Timeline from "./Timeline";
+class App extends Component {
+  render() {
+    return (
+      <div className="panels">
+        <div className="panel inactive">
+          {[...Array(6)].map(() => (
+            <section className="section">
+              <h1>List section</h1>
+              <Textarea />
+            </section>
+          ))}
+        </div>
 
-const App = props => (
-  <FirebaseUser>
-    {user => (user.userID ? <Timeline {...props} {...user} /> : null)}
-  </FirebaseUser>
-);
+        <div className="panel inactive">
+          {[...Array(2)].map(() => (
+            <section className="section">
+              <h1>Month section</h1>
+              <Textarea />
+            </section>
+          ))}
+        </div>
 
-export default () => (
-  <Router>
-    <Switch>
-      <Route exact path="/" component={App} />
-      <Route exact path="/:year" component={App} />
-      <Route exact path="/:year/:month" component={App} />
-      <Route exact path="/:year/:month/:day" component={App} />
-    </Switch>
-  </Router>
-);
+        <div className="panel active">
+          {[...Array(60)].map(() => (
+            <section className="section">
+              <h1>Day section</h1>
+              <Textarea />
+            </section>
+          ))}
+        </div>
+      </div>
+    );
+  }
+}
+
+export default App;
