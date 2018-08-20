@@ -1,7 +1,7 @@
 html {
-  font-size: 150%;
+  font-size: 134.375%;
   color: white;
-  background-color: #222;
+  background-color: #000;
 }
 
 body {
@@ -9,47 +9,103 @@ body {
   font-size: 0.75rem;
 }
 
-.panels {
+.browser {
+  --collapsedWidth: 2rem;
+  pointer-events: none;
 }
 
-.panel {
-  background-color: #333;
+.timeline {
+}
+
+.month {
   position: relative;
-  width: 80vw;
-  max-width: 30rem;
-  padding: 0.5rem;
-  min-height: 100vh;
-  box-shadow: 0 0 3rem black;
-}
-
-.panel:nth-child(1) {
-  left: 0;
-}
-
-.panel:nth-child(2) {
-  left: 0;
-  right: 0;
-  margin: 0 auto;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: 0;
+  display: grid;
+  grid-auto-flow: column;
   z-index: 1;
 }
 
-.panel:nth-child(3) {
-  right: 0;
-  margin: 0 0 0 auto;
-}
-
-.panel.active {
+.dailies-track {
+  position: relative;
+  background: black;
   z-index: 2;
 }
 
-.panel.inactive {
-  position: fixed;
-  top: 0;
-  color: grey;
+.month-track {
+  position: relative;
+  background: black;
+  z-index: 1;
+  pointer-events: all;
 }
 
-.panel > * + * {
-  margin-top: 1rem;
+.lists {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 0;
+}
+
+.entry {
+  position: relative;
+  width: calc(100vw - 2 * var(--collapsedWidth));
+  max-width: 30rem;
+  color: grey;
+  padding: calc(var(--collapsedWidth) / 4);
+  pointer-events: all;
+}
+
+.entry.monthly {
+  position: sticky;
+  top: 0;
+}
+
+.entry.daily {
+}
+
+.entry.list {
+  border-left: none;
+}
+
+.active-daily .month {
+  grid-template-columns:
+    minmax(var(--collapsedWidth), max-content)
+    minmax(var(--collapsedWidth), max-content)
+    max-content;
+}
+.active-daily .daily {
+  color: white;
+}
+
+.active-monthly .month {
+  grid-template-columns:
+    minmax(var(--collapsedWidth), max-content)
+    max-content
+    minmax(var(--collapsedWidth), max-content);
+}
+.active-monthly .monthly {
+  color: white;
+  position: relative;
+}
+
+.active-list .month {
+  grid-template-columns:
+    max-content
+    minmax(var(--collapsedWidth), max-content)
+    minmax(var(--collapsedWidth), max-content);
+}
+.active-list .list {
+  color: white;
+}
+.active-list .timeline {
+  position: fixed;
+}
+.active-list .monthly {
+  position: relative;
+}
+.active-list .lists {
+  position: relative;
 }
 
 h1 {
@@ -58,7 +114,8 @@ h1 {
 
 textarea {
   width: 100%;
-  border-top: 1px solid;
+  background: #222;
+  padding: 0.5rem;
   resize: none;
   font-family: monospace, monospace;
 }
