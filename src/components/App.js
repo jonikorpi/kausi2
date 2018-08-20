@@ -1,15 +1,14 @@
 import React, { Component } from "react";
 import Textarea from "react-textarea-autosize";
 
-const scrollIntoView = element => {
+const scrollIntoView = (element, offset) => {
   const { top, height } = element.getBoundingClientRect();
   const { clientHeight } = document.documentElement;
   const isAbove = top < 0;
   const isBelow = top + height > clientHeight;
 
   if (isAbove || isBelow) {
-    const scrollToTop = isAbove;
-    element.scrollIntoView(scrollToTop);
+    window.scrollTo(0, window.scrollY + top - offset);
   }
 };
 
@@ -17,62 +16,89 @@ class App extends Component {
   state = {
     activeEntries: "daily",
     listOffset: 0,
-    monthlyOffset: 0,
-    dailyOffset: 0,
   };
 
   activateLists = event => {
     event.persist();
-    this.setState({ activeEntries: "list" }, () =>
-      scrollIntoView(event.nativeEvent.target.parentNode)
+    const element = event.nativeEvent.target.parentNode;
+    const offset = element.getBoundingClientRect().top;
+    this.setState(
+      {
+        activeEntries: "list",
+        // [`${this.state.activeEntries}Offset`]: -window.scrollY,
+        listOffset: 0,
+      },
+      () => scrollIntoView(element, offset)
     );
   };
   activateMonthlies = event => {
     event.persist();
-    this.setState({ activeEntries: "monthly" }, () =>
-      scrollIntoView(event.nativeEvent.target.parentNode)
+    const element = event.nativeEvent.target.parentNode;
+    const offset = element.getBoundingClientRect().top;
+    this.setState(
+      {
+        activeEntries: "monthly",
+        listOffset:
+          this.state.activeEntries === "list"
+            ? -window.scrollY
+            : this.state.listOffset,
+      },
+      () => scrollIntoView(element, offset)
     );
   };
   activateDailies = event => {
     event.persist();
-    this.setState({ activeEntries: "daily" }, () =>
-      scrollIntoView(event.nativeEvent.target.parentNode)
+    const element = event.nativeEvent.target.parentNode;
+    const offset = element.getBoundingClientRect().top;
+    this.setState(
+      {
+        activeEntries: "daily",
+        listOffset:
+          this.state.activeEntries === "list"
+            ? -window.scrollY
+            : this.state.listOffset,
+      },
+      () => scrollIntoView(element, offset)
     );
   };
 
   render() {
-    const {
-      activeEntries,
-      listOffset,
-      monthlyOffset,
-      dailyOffset,
-    } = this.state;
+    const { activeEntries, listOffset } = this.state;
 
     return (
-      <div className={`browser active-${activeEntries}`}>
+      <div
+        className={`browser active-${activeEntries}`}
+        style={{
+          "--listOffset": listOffset + "px",
+        }}
+      >
         <article className="timeline">
-          {[...Array(3)].map(() => (
-            <section className="month">
+          {[...Array(3)].map((value, index) => (
+            <section className="month" key={index}>
               <div className="lists-track">
                 <div className="entry list placeholder" />
               </div>
               <div className="month-track">
                 <section className="entry monthly">
-                  <h1>Monthly</h1>
+                  <h1>Month {index + 1}</h1>
                   <Textarea
                     onFocus={this.activateMonthlies}
-                    defaultValue="Monthly entry"
+                    defaultValue={[...Array(Math.pow(55, index + 2) % 24 + 1)]
+                      .map(() => `Monthly entry ${index + 1}`)
+                      .join("\n")}
                   />
                 </section>
               </div>
 
               <section className="dailies-track">
-                {[...Array(30)].map(() => (
-                  <section className="entry daily">
-                    <h1>Daily</h1>
+                {[...Array(30)].map((value, index) => (
+                  <section className="entry daily" key={index}>
+                    <h1>Daily {index + 1}</h1>
                     <Textarea
                       onFocus={this.activateDailies}
-                      defaultValue="Daily entry"
+                      defaultValue={[...Array(Math.pow(55, index + 2) % 24 + 1)]
+                        .map(() => `Daily entry ${index + 1}`)
+                        .join("\n")}
                     />
                   </section>
                 ))}
@@ -82,12 +108,14 @@ class App extends Component {
         </article>
 
         <article className="lists">
-          {[...Array(50)].map(() => (
-            <section className="entry list">
-              <h1>List</h1>
+          {[...Array(50)].map((value, index) => (
+            <section className="entry list" key={index}>
+              <h1>List {index}</h1>
               <Textarea
                 onFocus={this.activateLists}
-                defaultValue="List entry"
+                defaultValue={[...Array(Math.pow(55, index + 2) % 24 + 1)]
+                  .map(() => `List entry ${index + 1}`)
+                  .join("\n")}
               />
             </section>
           ))}
