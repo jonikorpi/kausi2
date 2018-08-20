@@ -11,15 +11,28 @@ body {
 
 .browser {
   --collapsedWidth: 2rem;
-  --listOffset: 0;
+  --listsOffset: 0px;
+  --monthliesOffset: 0px;
+  --dailiesOffset: 0px;
   pointer-events: none;
 }
 
+.lists {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  z-index: 0;
+  display: grid;
+  grid-auto-flow: column;
+}
+
 .timeline {
+  position: relative;
+  z-index: 1;
 }
 
 .month {
-  position: relative;
   width: fit-content;
   margin-left: auto;
   margin-right: 0;
@@ -28,25 +41,28 @@ body {
   z-index: 1;
 }
 
+.track {
+  background-color: black;
+}
+
 .dailies-track {
   position: relative;
-  background: black;
   z-index: 2;
+  transform: translateY(var(--dailiesOffset));
 }
 
-.month-track {
+.monthlies-track {
   position: relative;
-  background: black;
   z-index: 1;
-  pointer-events: all;
+  transform: translateY(var(--monthliesOffset));
 }
 
-.lists {
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 0;
-  transform: translateY(var(--listOffset));
+.lists-track {
+  transform: translateY(var(--listsOffset));
+}
+
+.placeholder {
+  visibility: hidden;
 }
 
 .entry {
@@ -58,55 +74,58 @@ body {
   pointer-events: all;
 }
 
+.entry.daily {
+}
+
 .entry.monthly {
   position: sticky;
   top: 0;
-}
-
-.entry.daily {
 }
 
 .entry.list {
   border-left: none;
 }
 
-.active-daily .month {
+.active-dailies .month,
+.active-dailies .lists {
   grid-template-columns:
     minmax(var(--collapsedWidth), max-content)
     minmax(var(--collapsedWidth), max-content)
     max-content;
 }
-.active-daily .daily {
+.active-dailies .daily {
   color: white;
 }
 
-.active-monthly .month {
+.active-monthlies .month,
+.active-monthlies .lists {
   grid-template-columns:
     minmax(var(--collapsedWidth), max-content)
     max-content
     minmax(var(--collapsedWidth), max-content);
 }
-.active-monthly .monthly {
+.active-monthlies .monthly {
   color: white;
   position: relative;
 }
 
-.active-list .month {
+.active-lists .month,
+.active-lists .lists {
   grid-template-columns:
     max-content
     minmax(var(--collapsedWidth), max-content)
     minmax(var(--collapsedWidth), max-content);
 }
-.active-list .list {
+.active-lists .list {
   color: white;
 }
-.active-list .timeline {
+.active-lists .timeline {
   position: fixed;
 }
-.active-list .monthly {
+.active-lists .monthly {
   position: relative;
 }
-.active-list .lists {
+.active-lists .lists {
   position: relative;
 }
 
