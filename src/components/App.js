@@ -1,6 +1,18 @@
 import React, { Component } from "react";
 import Textarea from "react-textarea-autosize";
 
+const scrollIntoView = element => {
+  const { top, height } = element.getBoundingClientRect();
+  const { clientHeight } = document.documentElement;
+  const isAbove = top < 0;
+  const isBelow = top + height > clientHeight;
+
+  if (isAbove || isBelow) {
+    const scrollToTop = isAbove;
+    element.scrollIntoView(scrollToTop);
+  }
+};
+
 class App extends Component {
   state = {
     activeEntries: "daily",
@@ -9,9 +21,24 @@ class App extends Component {
     dailyOffset: 0,
   };
 
-  activateLists = () => this.setState({ activeEntries: "list" });
-  activateMonthlies = () => this.setState({ activeEntries: "monthly" });
-  activateDailies = () => this.setState({ activeEntries: "daily" });
+  activateLists = event => {
+    event.persist();
+    this.setState({ activeEntries: "list" }, () =>
+      scrollIntoView(event.nativeEvent.target.parentNode)
+    );
+  };
+  activateMonthlies = event => {
+    event.persist();
+    this.setState({ activeEntries: "monthly" }, () =>
+      scrollIntoView(event.nativeEvent.target.parentNode)
+    );
+  };
+  activateDailies = event => {
+    event.persist();
+    this.setState({ activeEntries: "daily" }, () =>
+      scrollIntoView(event.nativeEvent.target.parentNode)
+    );
+  };
 
   render() {
     const {
