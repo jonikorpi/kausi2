@@ -1,35 +1,24 @@
-import React, { Component, Fragment } from "react";
+import React, { Component, PureComponent, Fragment } from "react";
 import Textarea from "react-textarea-autosize";
 import {
   startOfDay,
   startOfMonth,
-  endOfMonth,
   endOfDay,
   addDays,
   format,
   getDaysInMonth,
-  getTime,
   getISODay,
   differenceInMilliseconds,
   differenceInMonths,
   subMonths,
   addMonths,
-  getMonth,
   isSameDay,
 } from "date-fns/esm";
+
+import Data from "../components/Data";
+
 const startOfToday = () => startOfDay(Date.now());
 const endOfToday = () => endOfDay(Date.now());
-
-// const scrollIntoView = (element, offset) => {
-//   const { top, height } = element.getBoundingClientRect();
-//   const { clientHeight } = document.documentElement;
-//   const isAbove = top < 0;
-//   const isBelow = top + height > clientHeight;
-
-//   if (isAbove || isBelow) {
-//     window.scrollTo(0, window.scrollY + top - offset);
-//   }
-// };
 
 class App extends Component {
   state = {
@@ -159,8 +148,8 @@ class Calendar extends Component {
                       "calendar/" +
                         format(month, "YYYY/MM") +
                         "/month/" +
-                        index +
-                        1,
+                        (index + 1) +
+                        ".txt",
                     ]}
                   />
                 ))}
@@ -176,8 +165,8 @@ class Calendar extends Component {
                   <Entry
                     autoFocus={this.shouldAutoFocus && isSameDay(today, day)}
                     data={[
-                      "calendar/" + format(day, "YYYY/MM/dd"),
-                      "reminders/" + format(day, "MM/dd"),
+                      "calendar/" + format(day, "YYYY/MM/dd") + ".txt",
+                      "reminders/" + format(day, "MM/dd") + ".txt",
                     ]}
                     key={format(day, "dd-MM-YYYY")}
                   />
@@ -197,7 +186,7 @@ const Lists = () => {
       <h1 className="section-title">Lists</h1>
       <div className="grid">
         {[...Array(50)].map((value, index) => (
-          <Entry data={["lists/" + (index + 1)]} key={index + 1} />
+          <Entry data={["lists/" + (index + 1) + ".txt"]} key={index + 1} />
         ))}
       </div>
     </section>
@@ -212,7 +201,7 @@ class Entry extends Component {
       <section className="entry">
         <div className="entry-body">
           {data.map(key => (
-            <Data key={key}>
+            <Data path={key} key={key}>
               {(value, update) => {
                 const isReminder = key.split("/")[0] === "reminders";
                 const shouldAutoHide = !value && isReminder;
@@ -242,15 +231,6 @@ class Entry extends Component {
         </div>
       </section>
     );
-  }
-}
-
-class Data extends Component {
-  state = { value: "" };
-  update = event => this.setState({ value: event.nativeEvent.target.value });
-
-  render() {
-    return this.props.children(this.state.value, this.update);
   }
 }
 
