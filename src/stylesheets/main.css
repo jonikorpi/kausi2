@@ -72,10 +72,15 @@ body {
 
 .entry {
   overflow: hidden;
+  border: 1px solid;
+}
+
+.entry.active {
+  width: fit-content;
 }
 
 .entry-body {
-  width: 100vw;
+  width: calc(100vw - 3rem);
   max-width: 25rem;
 }
 
@@ -83,11 +88,20 @@ h1 {
   font-weight: bold;
 }
 
+.editor {
+}
+
+.editor + .editor {
+  border-top: 1px solid;
+}
+
 textarea {
   width: 100%;
-  background: #222;
-  padding: 0.5rem;
   resize: none;
   font-family: monospace, monospace;
   min-height: 5rem;
+}
+
+.editor + .editor textarea {
+  min-height: 1rem;
 }

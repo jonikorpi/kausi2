@@ -86,22 +86,7 @@ class App extends Component {
             activePanel === "lists" ? "active" : "inactive"
           }`}
         >
-          <h1>Lists</h1>
-          <div className="grid">
-            {[...Array(50)].map((value, index) => (
-              <section className="entry list" key={index}>
-                <div className="entry-body">
-                  <h2>List {index}</h2>
-                  <Textarea
-                    onFocus={this.activateLists}
-                    defaultValue={[...Array(Math.pow(55, index + 2) % 24 + 1)]
-                      .map(() => `List entry ${index + 1}`)
-                      .join("\n")}
-                  />
-                </div>
-              </section>
-            ))}
-          </div>
+          <Lists />
         </article>
 
         <button
@@ -164,11 +149,10 @@ class Calendar extends Component {
             <section className="month" key={format(month, "MM-YYYY")}>
               <h1>{format(month, "MMMM YYYY")}</h1>
               <div className="grid">
-                <section className="entry monthly">
-                  <div className="entry-body">
-                    <Textarea />
-                  </div>
-                </section>
+                {/* Foreach entry created */}
+                <Entry
+                  data={["calendar/" + format(month, "YYYY/MM") + "/month"]}
+                />
               </div>
 
               <div
@@ -178,12 +162,13 @@ class Calendar extends Component {
                 }}
               >
                 {days.map(day => (
-                  <section className="entry daily" key={format(day, "DD")}>
-                    <div className="entry-body">
-                      <h2>{format(day, "dd E")}</h2>
-                      <Textarea />
-                    </div>
-                  </section>
+                  <Entry
+                    data={[
+                      "calendar/" + format(day, "YYYY/MM/dd"),
+                      "reminders/" + format(day, "MM/dd"),
+                    ]}
+                    key={format(day, "dd-MM-YYYY")}
+                  />
                 ))}
               </div>
             </section>
@@ -193,5 +178,73 @@ class Calendar extends Component {
     );
   }
 }
+
+const Lists = () => {
+  return (
+    <Fragment>
+      <h1>Lists</h1>
+      <div className="grid">
+        {[...Array(50)].map((value, index) => (
+          <Entry data={["lists/" + (index + 1)]} key={index + 1} />
+        ))}
+      </div>
+    </Fragment>
+  );
+};
+
+class Entry extends Component {
+  state = { active: false };
+  activate = () => this.setState({ active: true });
+  deactivate = () => this.setState({ active: false });
+
+  render() {
+    const { data } = this.props;
+    const { active } = this.state;
+
+    return (
+      <section className={`entry ${active ? "active" : "inactive"}`}>
+        <div className="entry-body">
+          {data.map(key => (
+            <Data key={key}>
+              {(value, update) => {
+                const shouldHide =
+                  !value && !active && key.split("/")[0] === "reminders";
+                return shouldHide ? null : (
+                  <div className="editor">
+                    <h2>{key}</h2>
+                    <Editor
+                      value={value}
+                      onChange={update}
+                      onFocus={this.activate}
+                      onBlur={this.deactivate}
+                    />
+                  </div>
+                );
+              }}
+            </Data>
+          ))}
+        </div>
+      </section>
+    );
+  }
+}
+
+class Data extends Component {
+  state = { value: "" };
+  update = event => this.setState({ value: event.nativeEvent.target.value });
+
+  render() {
+    return this.props.children("", this.update);
+  }
+}
+
+const Editor = ({ value, onChange, onFocus, onBlur }) => (
+  <Textarea
+    value={value}
+    onChange={onChange}
+    onFocus={onFocus}
+    onBlur={onBlur}
+  />
+);
 
 export default App;
