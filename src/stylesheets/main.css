@@ -1,8 +1,8 @@
 html {
   --collapsed-height: 2.5rem;
   font-size: 134.375%;
-  color: white;
-  background-color: #000;
+  color: black;
+  background-color: #aaa;
 }
 
 body {
@@ -30,7 +30,7 @@ body {
 }
 
 .calendar {
-  background-color: green;
+  background-color: white;
   bottom: 0;
 }
 .calendar.active {
@@ -38,7 +38,7 @@ body {
 }
 
 .lists {
-  background-color: blue;
+  background-color: white;
   top: 0;
 }
 
@@ -52,6 +52,10 @@ body {
   z-index: 2;
   width: 100%;
   height: var(--collapsed-height);
+  outline: none;
+}
+.clicker:hover {
+  background-color: hsla(40, 100%, 61.8%, 0.5);
 }
 .clicker.top {
   top: 0;
@@ -61,15 +65,10 @@ body {
 }
 
 .section {
-  padding: 0.5rem;
-}
-
-.section > * + * {
-  margin-top: 0.25rem;
 }
 
 .section + .section {
-  border-top: 0.15rem solid;
+  border-top: 0.17rem solid;
 }
 
 .section-title {
@@ -87,6 +86,9 @@ body {
   --gridStartsFrom: 1;
   display: grid;
   grid-template: auto / repeat(var(--gridWidth), 1fr);
+  width: 100%;
+  border-top: 1px solid;
+  overflow: hidden;
 }
 
 .grid > *:first-child {
@@ -94,15 +96,25 @@ body {
 }
 
 .entry {
+  background-color: white;
+  box-shadow: 0 0 2rem white, 0 0 2rem white;
+  min-width: 0;
   overflow: hidden;
+}
+
+.entry.weekend {
+  background-color: #eee;
+  box-shadow: 0 0 2rem #eee, 0 0 2rem #eee;
 }
 
 .entry:focus-within {
   width: fit-content;
+  z-index: 2;
+  position: relative;
 }
 
 .entry-body {
-  width: calc(100vw - 3rem);
+  width: calc(100vw - 4rem);
   max-width: 25rem;
 }
 
@@ -115,6 +127,7 @@ body {
 
 .entry:focus-within .editor {
   display: block;
+  background-color: yellow;
 }
 
 .editor + .editor {
@@ -123,6 +136,7 @@ body {
 .editor-title {
   /* position: absolute; */
   display: block;
+  cursor: text;
 }
 
 .textarea {
@@ -130,6 +144,7 @@ body {
   resize: none;
   font-family: monospace, monospace;
   min-height: 3rem;
+  outline: none;
 }
 
 .editor + .editor textarea {

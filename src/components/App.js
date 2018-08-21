@@ -8,11 +8,13 @@ import {
   format,
   getDaysInMonth,
   getISODay,
+  getISOWeek,
   differenceInMilliseconds,
   differenceInMonths,
   subMonths,
   addMonths,
   isSameDay,
+  isWeekend,
 } from "date-fns/esm";
 
 import Data from "../components/Data";
@@ -137,6 +139,13 @@ class Calendar extends Component {
             addDays(month, index)
           );
 
+          const weeks = days.reduce((weeks, day) => {
+            const week = getISOWeek(day);
+            weeks[week] = weeks[week] || [];
+            weeks[week].push(day);
+            return weeks;
+          }, {});
+
           return (
             <section className="section month" key={format(month, "MM-YYYY")}>
               <h1 className="section-title">{format(month, "MMMM YYYY")}</h1>
@@ -144,6 +153,7 @@ class Calendar extends Component {
                 {[...Array(2)].map((value, index) => (
                   <Entry
                     key={index + 1}
+                    name={"Month" + index + 1}
                     data={[
                       "calendar/" +
                         format(month, "YYYY/MM") +
@@ -155,23 +165,32 @@ class Calendar extends Component {
                 ))}
               </div>
 
-              <div
-                className="grid"
-                style={{
-                  "--gridStartsFrom": getISODay(days[0]),
-                }}
-              >
-                {days.map(day => (
-                  <Entry
-                    autoFocus={this.shouldAutoFocus && isSameDay(today, day)}
-                    data={[
-                      "calendar/" + format(day, "YYYY/MM/dd") + ".txt",
-                      "reminders/" + format(day, "MM/dd") + ".txt",
-                    ]}
-                    key={format(day, "dd-MM-YYYY")}
-                  />
-                ))}
-              </div>
+              {Object.values(weeks).map((week, index) => (
+                <div
+                  key={index}
+                  className="grid"
+                  style={
+                    index === 0
+                      ? {
+                          "--gridStartsFrom": getISODay(week[0]),
+                        }
+                      : null
+                  }
+                >
+                  {week.map(day => (
+                    <Entry
+                      key={format(day, "dd-MM-YYYY")}
+                      autoFocus={this.shouldAutoFocus && isSameDay(today, day)}
+                      data={[
+                        "calendar/" + format(day, "YYYY/MM/dd") + ".txt",
+                        "reminders/" + format(day, "MM/dd") + ".txt",
+                      ]}
+                      weekend={isWeekend(day)}
+                      day={day}
+                    />
+                  ))}
+                </div>
+              ))}
             </section>
           );
         })}
@@ -181,24 +200,39 @@ class Calendar extends Component {
 }
 
 const Lists = () => {
+  const entries = [...Array(50)].map((value, index) => index);
+  const groups = entries.reduce((groups, entry) => {
+    const group = Math.floor(entry / 5);
+    groups[group] = groups[group] || [];
+    groups[group].push(entry);
+    return groups;
+  }, {});
+
   return (
     <section className="section">
       <h1 className="section-title">Lists</h1>
-      <div className="grid">
-        {[...Array(50)].map((value, index) => (
-          <Entry data={["lists/" + (index + 1) + ".txt"]} key={index + 1} />
-        ))}
-      </div>
+
+      {Object.values(groups).map((entries, index) => (
+        <div key={index} className="grid" style={{ "--gridWidth": 5 }}>
+          {entries.map(entry => (
+            <Entry
+              key={entry + 1}
+              name={"List" + entry + 1}
+              data={["lists/" + (entry + 1) + ".txt"]}
+            />
+          ))}
+        </div>
+      ))}
     </section>
   );
 };
 
 class Entry extends Component {
   render() {
-    const { data, autoFocus } = this.props;
+    const { data, autoFocus, weekend, day, name } = this.props;
 
     return (
-      <section className="entry">
+      <section className={`entry ${weekend ? "weekend" : "not-weekend"}`}>
         <div className="entry-body">
           {data.map(key => (
             <Data path={key} key={key}>
@@ -207,12 +241,13 @@ class Entry extends Component {
                 const shouldAutoHide = !value && isReminder;
                 return (
                   <div
-                    className={`editor ${
-                      shouldAutoHide ? "auto-hide" : "always-visible"
-                    }`}
+                    className={`
+                      editor 
+                      ${shouldAutoHide ? "auto-hide" : "always-visible"}
+                    `}
                   >
                     <label htmlFor={key} className="editor-title">
-                      {key}
+                      {key.split("/")[key.split("/").length - 1].split(".")[0]}
                     </label>
                     <Textarea
                       className="textarea"

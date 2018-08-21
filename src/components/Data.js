@@ -22,7 +22,6 @@ class Data extends PureComponent {
 
   handleEvent = event => {
     const { newValue } = event;
-    console.log(event);
     this.setState({ value: newValue });
   };
 
