@@ -11,7 +11,7 @@ class Data extends PureComponent {
 
     database.on("ready", () => {
       storage.client.on("change", event => {
-        if (event.path === "/kausi/" + path) {
+        if (event.relativePath === path) {
           this.handleEvent(event);
         }
       });
