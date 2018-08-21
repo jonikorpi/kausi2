@@ -1,6 +1,23 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import Textarea from "react-textarea-autosize";
-import { startOfToday, addDays, format } from "date-fns";
+import {
+  startOfDay,
+  startOfMonth,
+  endOfMonth,
+  endOfDay,
+  addDays,
+  format,
+  getDaysInMonth,
+  getTime,
+  getISODay,
+  differenceInMilliseconds,
+  differenceInMonths,
+  subMonths,
+  addMonths,
+  getMonth,
+} from "date-fns/esm";
+const startOfToday = () => startOfDay(Date.now());
+const endOfToday = () => endOfDay(Date.now());
 
 // const scrollIntoView = (element, offset) => {
 //   const { top, height } = element.getBoundingClientRect();
@@ -53,50 +70,14 @@ class App extends Component {
     const { activePanel, calendarScrolledTo, listsScrolledTo } = this.state;
 
     return (
-      <React.Fragment>
+      <Fragment>
         <article
           ref={element => (this.calendar = element)}
           className={`panel calendar ${
             activePanel === "calendar" ? "active" : "inactive"
           }`}
         >
-          {[...Array(3)].map((value, index) => (
-            <section className="month" key={index}>
-              <h1>Month {index + 1}</h1>
-              <div className="grid">
-                <section className="entry monthly">
-                  <div className="entry-body">
-                    <Textarea
-                      onFocus={this.activateMonthlies}
-                      defaultValue={[...Array(Math.pow(55, index + 2) % 24 + 1)]
-                        .map(() => `Monthly entry ${index + 1}`)
-                        .join("\n")}
-                    />
-                  </div>
-                </section>
-              </div>
-
-              <div className="grid">
-                {[...Array(30)].map((value, index) => (
-                  <section className="entry daily" key={index}>
-                    <div className="entry-body">
-                      <h2>
-                        {format(addDays(startOfToday(), index), "DD dddd")}
-                      </h2>
-                      <Textarea
-                        onFocus={this.activateDailies}
-                        defaultValue={[
-                          ...Array(Math.pow(55, index + 2) % 24 + 1),
-                        ]
-                          .map(() => `Daily entry ${index + 1}`)
-                          .join("\n")}
-                      />
-                    </div>
-                  </section>
-                ))}
-              </div>
-            </section>
-          ))}
+          <Calendar />
         </article>
 
         <article
@@ -133,7 +114,82 @@ class App extends Component {
               : this.activateCalendar
           }
         />
-      </React.Fragment>
+      </Fragment>
+    );
+  }
+}
+
+class Calendar extends Component {
+  state = {
+    today: startOfToday(),
+    startAtMonth: startOfMonth(subMonths(Date.now(), 1)),
+    endAtMonth: startOfMonth(addMonths(Date.now(), 1)),
+  };
+
+  componentDidMount() {
+    this.setTodayTimer();
+  }
+  componentWillUnmount() {
+    if (this.timer) {
+      window.clearTimeout(this.timer);
+    }
+  }
+
+  setTodayTimer = () => {
+    this.timer = window.setTimeout(
+      this.setToday,
+      differenceInMilliseconds(endOfToday(), Date.now())
+    );
+  };
+  setToday = () => {
+    this.setState({ today: startOfToday() });
+    this.setTodayTimer();
+  };
+
+  render() {
+    const { today, startAtMonth, endAtMonth } = this.state;
+
+    const months = [
+      ...Array(differenceInMonths(endAtMonth, startAtMonth) + 1),
+    ].map((value, index) => addMonths(startAtMonth, index));
+
+    return (
+      <Fragment>
+        {months.map(month => {
+          const days = [...Array(getDaysInMonth(month))].map((value, index) =>
+            addDays(month, index)
+          );
+
+          return (
+            <section className="month" key={format(month, "MM-YYYY")}>
+              <h1>{format(month, "MMMM YYYY")}</h1>
+              <div className="grid">
+                <section className="entry monthly">
+                  <div className="entry-body">
+                    <Textarea />
+                  </div>
+                </section>
+              </div>
+
+              <div
+                className="grid"
+                style={{
+                  "--gridStartsFrom": getISODay(days[0]),
+                }}
+              >
+                {days.map(day => (
+                  <section className="entry daily" key={format(day, "DD")}>
+                    <div className="entry-body">
+                      <h2>{format(day, "dd E")}</h2>
+                      <Textarea />
+                    </div>
+                  </section>
+                ))}
+              </div>
+            </section>
+          );
+        })}
+      </Fragment>
     );
   }
 }

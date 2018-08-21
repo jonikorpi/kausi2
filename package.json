@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "date-fns": "^1.29.0",
+    "date-fns": "^2.0.0-alpha.16",
     "jonikorpi-base-files": "^9.1.5",
     "lodash.debounce": "^4.0.8",
     "react": "^16.4.2",

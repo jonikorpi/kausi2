@@ -23,6 +23,8 @@ body {
   height: var(--collapsed-height);
   overflow: hidden;
   position: fixed;
+  left: 0;
+  right: 0;
   z-index: 1;
   box-shadow: 0 0 2rem hsla(0, 0%, 0%, 0.5);
 }
@@ -59,8 +61,13 @@ body {
 }
 
 .grid {
+  --gridStartsFrom: 1;
   display: grid;
   grid-template: auto / repeat(7, 1fr);
+}
+
+.grid > *:first-child {
+  grid-column-start: var(--gridStartsFrom);
 }
 
 .entry {
@@ -82,4 +89,5 @@ textarea {
   padding: 0.5rem;
   resize: none;
   font-family: monospace, monospace;
+  min-height: 5rem;
 }
