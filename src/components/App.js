@@ -15,6 +15,7 @@ import {
   subMonths,
   addMonths,
   getMonth,
+  isSameDay,
 } from "date-fns/esm";
 const startOfToday = () => startOfDay(Date.now());
 const endOfToday = () => endOfDay(Date.now());
@@ -105,6 +106,7 @@ class App extends Component {
 }
 
 class Calendar extends Component {
+  shouldAutoFocus = true;
   state = {
     today: startOfToday(),
     startAtMonth: startOfMonth(subMonths(Date.now(), 1)),
@@ -113,6 +115,7 @@ class Calendar extends Component {
 
   componentDidMount() {
     this.setTodayTimer();
+    this.shouldAutoFocus = false;
   }
   componentWillUnmount() {
     if (this.timer) {
@@ -146,13 +149,21 @@ class Calendar extends Component {
           );
 
           return (
-            <section className="month" key={format(month, "MM-YYYY")}>
-              <h1>{format(month, "MMMM YYYY")}</h1>
-              <div className="grid">
-                {/* Foreach entry created */}
-                <Entry
-                  data={["calendar/" + format(month, "YYYY/MM") + "/month"]}
-                />
+            <section className="section month" key={format(month, "MM-YYYY")}>
+              <h1 className="section-title">{format(month, "MMMM YYYY")}</h1>
+              <div className="grid" style={{ "--gridWidth": 2 }}>
+                {[...Array(2)].map((value, index) => (
+                  <Entry
+                    key={index + 1}
+                    data={[
+                      "calendar/" +
+                        format(month, "YYYY/MM") +
+                        "/month/" +
+                        index +
+                        1,
+                    ]}
+                  />
+                ))}
               </div>
 
               <div
@@ -163,6 +174,7 @@ class Calendar extends Component {
               >
                 {days.map(day => (
                   <Entry
+                    autoFocus={this.shouldAutoFocus && isSameDay(today, day)}
                     data={[
                       "calendar/" + format(day, "YYYY/MM/dd"),
                       "reminders/" + format(day, "MM/dd"),
@@ -181,38 +193,42 @@ class Calendar extends Component {
 
 const Lists = () => {
   return (
-    <Fragment>
-      <h1>Lists</h1>
+    <section className="section">
+      <h1 className="section-title">Lists</h1>
       <div className="grid">
         {[...Array(50)].map((value, index) => (
           <Entry data={["lists/" + (index + 1)]} key={index + 1} />
         ))}
       </div>
-    </Fragment>
+    </section>
   );
 };
 
 class Entry extends Component {
-  state = { active: false };
-  activate = () => this.setState({ active: true });
-  deactivate = () => this.setState({ active: false });
-
   render() {
-    const { data } = this.props;
-    const { active } = this.state;
+    const { data, autoFocus } = this.props;
 
     return (
-      <section className={`entry ${active ? "active" : "inactive"}`}>
+      <section className="entry">
         <div className="entry-body">
           {data.map(key => (
             <Data key={key}>
               {(value, update) => {
-                const shouldHide =
-                  !value && !active && key.split("/")[0] === "reminders";
-                return shouldHide ? null : (
-                  <div className="editor">
-                    <h2>{key}</h2>
-                    <Editor
+                const isReminder = key.split("/")[0] === "reminders";
+                const shouldAutoHide = !value && isReminder;
+                return (
+                  <div
+                    className={`editor ${
+                      shouldAutoHide ? "auto-hide" : "always-visible"
+                    }`}
+                  >
+                    <label htmlFor={key} className="editor-title">
+                      {key}
+                    </label>
+                    <Textarea
+                      className="textarea"
+                      id={key}
+                      autoFocus={!isReminder && autoFocus}
                       value={value}
                       onChange={update}
                       onFocus={this.activate}
@@ -234,17 +250,8 @@ class Data extends Component {
   update = event => this.setState({ value: event.nativeEvent.target.value });
 
   render() {
-    return this.props.children("", this.update);
+    return this.props.children(this.state.value, this.update);
   }
 }
-
-const Editor = ({ value, onChange, onFocus, onBlur }) => (
-  <Textarea
-    value={value}
-    onChange={onChange}
-    onFocus={onFocus}
-    onBlur={onBlur}
-  />
-);
 
 export default App;

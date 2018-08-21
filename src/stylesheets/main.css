@@ -11,12 +11,12 @@ body {
 }
 
 .panel {
-  padding: 0.5rem;
   position: relative;
 }
 
 .panel.active {
   z-index: 0;
+  min-height: calc(100vh - var(--collapsed-height));
 }
 
 .panel.inactive {
@@ -60,10 +60,33 @@ body {
   bottom: 0;
 }
 
+.section {
+  padding: 0.5rem;
+}
+
+.section > * + * {
+  margin-top: 0.25rem;
+}
+
+.section + .section {
+  border-top: 0.15rem solid;
+}
+
+.section-title {
+  font-weight: bold;
+  line-height: 1.75rem;
+  font-size: 1.5rem;
+}
+
+.inactive .section-title {
+  text-decoration: underline;
+}
+
 .grid {
+  --gridWidth: 7;
   --gridStartsFrom: 1;
   display: grid;
-  grid-template: auto / repeat(7, 1fr);
+  grid-template: auto / repeat(var(--gridWidth), 1fr);
 }
 
 .grid > *:first-child {
@@ -72,10 +95,9 @@ body {
 
 .entry {
   overflow: hidden;
-  border: 1px solid;
 }
 
-.entry.active {
+.entry:focus-within {
   width: fit-content;
 }
 
@@ -84,22 +106,30 @@ body {
   max-width: 25rem;
 }
 
-h1 {
-  font-weight: bold;
-}
-
 .editor {
 }
 
-.editor + .editor {
-  border-top: 1px solid;
+.editor.auto-hide {
+  display: none;
 }
 
-textarea {
+.entry:focus-within .editor {
+  display: block;
+}
+
+.editor + .editor {
+}
+
+.editor-title {
+  /* position: absolute; */
+  display: block;
+}
+
+.textarea {
   width: 100%;
   resize: none;
   font-family: monospace, monospace;
-  min-height: 5rem;
+  min-height: 3rem;
 }
 
 .editor + .editor textarea {
