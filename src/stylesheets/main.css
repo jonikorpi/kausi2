@@ -1,4 +1,5 @@
 html {
+  --collapsed-height: 2.5rem;
   font-size: 134.375%;
   color: white;
   background-color: #000;
@@ -9,124 +10,66 @@ body {
   font-size: 0.75rem;
 }
 
-.browser {
-  --collapsedWidth: 2rem;
-  --listsOffset: 0px;
-  --monthliesOffset: 0px;
-  --dailiesOffset: 0px;
-  pointer-events: none;
+.panel {
+  padding: 0.5rem;
+  position: relative;
+}
+
+.panel.active {
+  z-index: 0;
+}
+
+.panel.inactive {
+  height: var(--collapsed-height);
+  overflow: hidden;
+  position: fixed;
+  z-index: 1;
+  box-shadow: 0 0 2rem hsla(0, 0%, 0%, 0.5);
+}
+
+.calendar {
+  background-color: green;
+  bottom: 0;
+}
+.calendar.active {
+  margin-top: var(--collapsed-height);
 }
 
 .lists {
+  background-color: blue;
+  top: 0;
+}
+
+.lists.active {
+  margin-bottom: var(--collapsed-height);
+}
+
+.clicker {
   position: fixed;
   left: 0;
-  top: 0;
-  right: 0;
-  z-index: 0;
-  display: grid;
-  grid-auto-flow: column;
-}
-
-.timeline {
-  position: relative;
-  z-index: 1;
-}
-
-.month {
-  width: fit-content;
-  margin-left: auto;
-  margin-right: 0;
-  display: grid;
-  grid-auto-flow: column;
-  z-index: 1;
-}
-
-.track {
-  background-color: black;
-}
-
-.dailies-track {
-  position: relative;
   z-index: 2;
-  transform: translateY(var(--dailiesOffset));
+  width: 100%;
+  height: var(--collapsed-height);
+}
+.clicker.top {
+  top: 0;
+}
+.clicker.bottom {
+  bottom: 0;
 }
 
-.monthlies-track {
-  position: relative;
-  z-index: 1;
-  transform: translateY(var(--monthliesOffset));
-}
-
-.lists-track {
-  transform: translateY(var(--listsOffset));
-}
-
-.placeholder {
-  visibility: hidden;
+.grid {
+  display: grid;
+  grid-template: auto / repeat(7, 1fr);
 }
 
 .entry {
-  position: relative;
-  width: calc(100vw - 2 * var(--collapsedWidth));
-  max-width: 30rem;
-  color: grey;
-  padding: calc(var(--collapsedWidth) / 4);
-  pointer-events: all;
+  overflow: hidden;
 }
 
-.entry.daily {
-}
-
-.entry.monthly {
-  position: sticky;
-  top: 0;
-}
-
-.entry.list {
-  border-left: none;
-}
-
-.active-dailies .month,
-.active-dailies .lists {
-  grid-template-columns:
-    minmax(var(--collapsedWidth), max-content)
-    minmax(var(--collapsedWidth), max-content)
-    max-content;
-}
-.active-dailies .daily {
-  color: white;
-}
-
-.active-monthlies .month,
-.active-monthlies .lists {
-  grid-template-columns:
-    minmax(var(--collapsedWidth), max-content)
-    max-content
-    minmax(var(--collapsedWidth), max-content);
-}
-.active-monthlies .monthly {
-  color: white;
-  position: relative;
-}
-
-.active-lists .month,
-.active-lists .lists {
-  grid-template-columns:
-    max-content
-    minmax(var(--collapsedWidth), max-content)
-    minmax(var(--collapsedWidth), max-content);
-}
-.active-lists .list {
-  color: white;
-}
-.active-lists .timeline {
-  position: fixed;
-}
-.active-lists .monthly {
-  position: relative;
-}
-.active-lists .lists {
-  position: relative;
+.entry-body {
+  width: 100vw;
+  max-width: 25rem;
 }
 
 h1 {
