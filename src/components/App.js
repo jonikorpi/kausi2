@@ -180,7 +180,7 @@ class Calendar extends Component {
 
           return (
             <section className="section month" key={format(month, "MM-YYYY")}>
-              <h1 className="section-title">{format(month, "MMMM YYYY")}</h1>
+              <h1 className="section-title">{format(month, "MMMM MM/YYYY")}</h1>
               <div className="grid" style={{ "--gridWidth": 3 }}>
                 {[...Array(3)].map((value, index) => (
                   <Entry
@@ -256,10 +256,10 @@ class Entry extends Component {
     return (
       <section
         className={`
-        entry 
-        ${weekend ? "weekend" : "not-weekend"}
-        ${ethereal ? "ethereal" : "not-ethereal"}
-      `}
+          entry 
+          ${weekend ? "weekend" : "not-weekend"}
+          ${ethereal ? "ethereal" : "not-ethereal"}
+        `}
       >
         <div className="entry-body">
           {data.map(key => (
@@ -277,11 +277,11 @@ class Entry extends Component {
                   >
                     <label htmlFor={key} className="editor-title">
                       <h2>
-                        {
-                          key
-                            .split("/")
-                            [key.split("/").length - 1].split(".")[0]
-                        }
+                        {name
+                          ? name
+                          : isReminder
+                            ? `Every year: ${format(day, "MMM do")}`
+                            : format(day, "dd EEE")}
                       </h2>
                     </label>
                     <Textarea
