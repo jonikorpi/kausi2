@@ -97,6 +97,7 @@ body {
 .entry {
   min-width: 0;
   display: grid;
+  position: relative;
 }
 
 .entry.weekend {
@@ -122,7 +123,6 @@ body {
   border-width: 1px;
   background-color: white;
   display: grid;
-  align-content: start;
 }
 
 .entry:nth-child(7n - 6) .entry-body {
@@ -130,11 +130,6 @@ body {
 }
 
 .editor {
-  align-self: start;
-}
-
-.editor:last-child {
-  align-self: stretch;
 }
 
 .editor.auto-hide {
@@ -150,21 +145,22 @@ body {
 }
 
 .editor-title {
-  /* position: absolute; */
   display: block;
-  cursor: text;
+  position: absolute;
+  width: 100%;
+  pointer-events: none;
   padding: 0.25rem 0.25rem 0;
+  font-size: 0.625rem;
+  line-height: 0.75rem;
 }
 
 .textarea {
   width: 100%;
   resize: none;
   font-family: monospace, monospace;
-  min-height: 1rem;
+  min-height: 100%;
   outline: none;
-  padding: 0.25rem;
-}
-
-.editor + .editor textarea {
-  min-height: 1rem;
+  padding: 1.25rem 0.25rem 0.25rem;
+  position: relative;
+  overflow: visible;
 }
