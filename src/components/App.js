@@ -5,15 +5,16 @@ import {
   startOfMonth,
   endOfDay,
   addDays,
+  subDays,
   format,
   getDaysInMonth,
-  getISODay,
   getISOWeek,
   differenceInMilliseconds,
   differenceInMonths,
   subMonths,
   addMonths,
   isSameDay,
+  isSameMonth,
   isWeekend,
 } from "date-fns/esm";
 
@@ -139,18 +140,37 @@ class Calendar extends Component {
             addDays(month, index)
           );
 
-          const weeks = days.reduce((weeks, day) => {
-            const week = getISOWeek(day);
-            weeks[week] = weeks[week] || [];
-            weeks[week].push(day);
-            return weeks;
-          }, {});
+          const weeks = Object.values(
+            days.reduce((weeks, day) => {
+              const week = getISOWeek(day);
+              weeks[week] = weeks[week] || [];
+              weeks[week].push(day);
+              return weeks;
+            }, {})
+          );
+
+          const firstWeek = weeks[0];
+          const lastWeek = weeks[weeks.length - 1];
+
+          if (firstWeek.length < 7) {
+            const daysToAdd = firstWeek.length;
+            for (let index = 0; index < 7 - daysToAdd; index++) {
+              firstWeek.unshift(subDays(firstWeek[0], 1));
+            }
+          }
+
+          if (lastWeek.length < 7) {
+            const daysToAdd = lastWeek.length;
+            for (let index = 0; index < 7 - daysToAdd; index++) {
+              lastWeek.push(addDays(lastWeek[lastWeek.length - 1], 1));
+            }
+          }
 
           return (
             <section className="section month" key={format(month, "MM-YYYY")}>
               <h1 className="section-title">{format(month, "MMMM YYYY")}</h1>
-              <div className="grid" style={{ "--gridWidth": 2 }}>
-                {[...Array(2)].map((value, index) => (
+              <div className="grid" style={{ "--gridWidth": 3 }}>
+                {[...Array(3)].map((value, index) => (
                   <Entry
                     key={index + 1}
                     name={"Month" + index + 1}
@@ -166,17 +186,7 @@ class Calendar extends Component {
               </div>
 
               {Object.values(weeks).map((week, index) => (
-                <div
-                  key={index}
-                  className="grid"
-                  style={
-                    index === 0
-                      ? {
-                          "--gridStartsFrom": getISODay(week[0]),
-                        }
-                      : null
-                  }
-                >
+                <div key={index} className="grid">
                   {week.map(day => (
                     <Entry
                       key={format(day, "dd-MM-YYYY")}
@@ -186,6 +196,7 @@ class Calendar extends Component {
                         "reminders/" + format(day, "MM/dd") + ".txt",
                       ]}
                       weekend={isWeekend(day)}
+                      ethereal={!isSameMonth(month, day)}
                       day={day}
                     />
                   ))}
@@ -229,10 +240,16 @@ const Lists = () => {
 
 class Entry extends Component {
   render() {
-    const { data, autoFocus, weekend, day, name } = this.props;
+    const { data, autoFocus, weekend, day, name, ethereal } = this.props;
 
     return (
-      <section className={`entry ${weekend ? "weekend" : "not-weekend"}`}>
+      <section
+        className={`
+        entry 
+        ${weekend ? "weekend" : "not-weekend"}
+        ${ethereal ? "ethereal" : "not-ethereal"}
+      `}
+      >
         <div className="entry-body">
           {data.map(key => (
             <Data path={key} key={key}>

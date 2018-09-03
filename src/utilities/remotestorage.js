@@ -20,7 +20,7 @@ const model = {
 };
 
 const database = new RemoteStorage({
-  logging: true,
+  // logging: true,
   modules: [model],
   changeEvents: {
     local: true,
