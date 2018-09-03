@@ -72,7 +72,7 @@ body {
 
 .section {
   overflow: hidden;
-  padding: 0.75rem;
+  padding: 1rem 0.5rem;
 }
 
 .section + .section {
@@ -85,7 +85,7 @@ body {
 
 .section-title {
   font-weight: bold;
-  line-height: 1.75rem;
+  line-height: 1.5rem;
   font-size: 1.5rem;
 }
 
@@ -121,8 +121,8 @@ body {
 }
 
 .entry-body {
-  width: calc(100vw - 4rem);
-  max-width: 25rem;
+  width: calc(100vw - 3rem);
+  max-width: 30rem;
   border-radius: 0.25rem;
   border: 0 solid;
   /* border-width: 1px 1px 1px 0; */
