@@ -30,6 +30,20 @@ class App extends Component {
     listsScrolledTo: 0,
   };
 
+  componentDidMount() {
+    document.addEventListener("keydown", this.handleKeyDown);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.handleKeyDown);
+  }
+
+  handleKeyDown = event => {
+    if (event.keyCode === 27 && document.activeElement) {
+      /*esc*/ document.activeElement.blur();
+    }
+  };
+
   activateCalendar = () => {
     const scrollTo = this.state.calendarScrolledTo;
     this.setState(
