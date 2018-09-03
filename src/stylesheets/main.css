@@ -26,7 +26,6 @@ body {
   left: 0;
   right: 0;
   z-index: 1;
-  box-shadow: 0 0 2rem hsla(0, 0%, 0%, 0.5);
 }
 
 .calendar {
@@ -35,6 +34,9 @@ body {
 }
 .calendar.active {
   margin-top: var(--collapsed-height);
+}
+.calendar.inactive {
+  border-top: 2px solid;
 }
 
 .lists {
@@ -45,6 +47,9 @@ body {
 .lists.active {
   margin-bottom: var(--collapsed-height);
 }
+.lists.inactive {
+  border-bottom: 2px solid;
+}
 
 .clicker {
   position: fixed;
@@ -53,6 +58,7 @@ body {
   width: 100%;
   height: var(--collapsed-height);
   outline: none;
+  background-color: hsla(0, 0%, 0%, 0.236);
 }
 .clicker:hover {
   background-color: hsla(40, 100%, 61.8%, 0.5);
