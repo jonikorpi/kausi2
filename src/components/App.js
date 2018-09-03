@@ -114,8 +114,8 @@ class App extends Component {
 class Calendar extends Component {
   state = {
     today: startOfToday(),
-    startAtMonth: startOfMonth(subMonths(Date.now(), 1)),
-    endAtMonth: startOfMonth(addMonths(Date.now(), 1)),
+    startAtMonth: startOfMonth(subMonths(Date.now(), 0)),
+    endAtMonth: startOfMonth(addMonths(Date.now(), 0)),
   };
 
   componentDidMount() {
@@ -272,10 +272,17 @@ class Entry extends Component {
                     className={`
                       editor 
                       ${shouldAutoHide ? "auto-hide" : "always-visible"}
+                      ${isReminder ? "reminder" : "regular"}
                     `}
                   >
                     <label htmlFor={key} className="editor-title">
-                      {key.split("/")[key.split("/").length - 1].split(".")[0]}
+                      <h2>
+                        {
+                          key
+                            .split("/")
+                            [key.split("/").length - 1].split(".")[0]
+                        }
+                      </h2>
                     </label>
                     <Textarea
                       className="textarea"
@@ -284,6 +291,7 @@ class Entry extends Component {
                       onChange={update}
                       onFocus={this.activate}
                       onBlur={this.deactivate}
+                      minRows={isReminder ? 1 : 3}
                     />
                   </div>
                 );

@@ -1,22 +1,26 @@
 html {
   --collapsed-height: 2.5rem;
-  font-size: 133.333333333%;
+  --lineHeight: 1.414;
+  font-family: "IBM Plex Mono", monospace, monospace;
+  font-size: calc(100% * var(--lineHeight));
   color: black;
-  background-color: #aaa;
+  background-color: white;
 }
 
 body {
   line-height: 1rem;
-  font-size: 0.75rem;
+  font-size: calc(1rem / var(--lineHeight));
 }
 
 .panel {
   position: relative;
+  transition: transform 262ms ease-out;
 }
 
 .panel.active {
   z-index: 0;
   min-height: calc(100vh - var(--collapsed-height));
+  transform: none;
 }
 
 .panel.inactive {
@@ -26,29 +30,30 @@ body {
   left: 0;
   right: 0;
   z-index: 1;
+  transition: none;
 }
 
 .calendar {
   background-color: white;
-  bottom: 0;
 }
 .calendar.active {
   margin-top: var(--collapsed-height);
 }
 .calendar.inactive {
-  border-top: 2px solid;
+  bottom: 0.5rem;
+  transform: translateY(0.5rem);
 }
 
 .lists {
   background-color: white;
-  top: 0;
 }
 
 .lists.active {
   margin-bottom: var(--collapsed-height);
 }
 .lists.inactive {
-  border-bottom: 2px solid;
+  top: 0.5rem;
+  transform: translateY(-0.5rem);
 }
 
 .clicker {
@@ -58,7 +63,7 @@ body {
   width: 100%;
   height: var(--collapsed-height);
   outline: none;
-  background-color: hsla(0, 0%, 0%, 0.236);
+  box-shadow: 0 0 2rem hsla(0, 0%, 0%, 0.236);
 }
 .clicker:hover {
   background-color: hsla(40, 100%, 61.8%, 0.5);
@@ -72,7 +77,7 @@ body {
 
 .section {
   overflow: hidden;
-  padding: 1rem 0.5rem;
+  padding: 1.5rem 1.5rem;
 }
 
 .section + .section {
@@ -80,7 +85,7 @@ body {
 }
 
 .section > * + * {
-  margin-top: 0.5rem;
+  margin-top: 1rem;
 }
 
 .section-title {
@@ -107,35 +112,41 @@ body {
 }
 
 .entry.weekend {
+  /* color: red; */
 }
 
 .entry.ethereal {
-  color: grey;
+  /* color: teal; */
+  font-style: italic;
 }
 
-.entry:focus-within {
+.section:focus-within .entry {
+  color: #999;
+}
+
+.entry.entry:focus-within {
   width: fit-content;
   z-index: 2;
   position: relative;
   margin-right: -1px;
+  color: black;
+  box-shadow: 0 0 2rem hsla(0, 0%, 0%, 0.236);
 }
 
 .entry-body {
-  width: calc(100vw - 3rem);
+  width: calc(100vw - 2rem);
   max-width: 30rem;
   border-radius: 0.25rem;
-  border: 0 solid;
-  /* border-width: 1px 1px 1px 0; */
-  border-width: 1px;
+  border: 1px solid;
   background-color: white;
   display: grid;
 }
 
-.entry:nth-child(7n - 6) .entry-body {
-  border-width: 1px;
+.editor {
 }
 
-.editor {
+.editor.reminder {
+  font-style: italic;
 }
 
 .editor.auto-hide {
@@ -159,18 +170,18 @@ body {
   position: absolute;
   width: 100%;
   pointer-events: none;
-  padding: 0.25rem 0.25rem 0;
-  font-size: 0.625rem;
+  padding: 0.25rem 0.5rem 0;
+  font-size: 0.6rem;
   line-height: 0.75rem;
+  font-weight: 600;
 }
 
 .textarea {
   width: 100%;
   resize: none;
-  font-family: monospace, monospace;
   min-height: 100%;
   outline: none;
-  padding: 1.25rem 0.25rem 0.25rem;
+  padding: 1.25rem 0.5rem 0.5rem;
   position: relative;
   overflow: visible;
 }
