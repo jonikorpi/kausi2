@@ -112,7 +112,6 @@ class App extends Component {
 }
 
 class Calendar extends Component {
-  shouldAutoFocus = true;
   state = {
     today: startOfToday(),
     startAtMonth: startOfMonth(subMonths(Date.now(), 1)),
@@ -121,7 +120,6 @@ class Calendar extends Component {
 
   componentDidMount() {
     this.setTodayTimer();
-    this.shouldAutoFocus = false;
   }
   componentWillUnmount() {
     if (this.timer) {
@@ -204,7 +202,6 @@ class Calendar extends Component {
                   {week.map(day => (
                     <Entry
                       key={format(day, "dd-MM-YYYY")}
-                      autoFocus={this.shouldAutoFocus && isSameDay(today, day)}
                       data={[
                         "calendar/" + format(day, "YYYY/MM/dd") + ".txt",
                         "reminders/" + format(day, "MM/dd") + ".txt",
@@ -254,7 +251,7 @@ const Lists = () => {
 
 class Entry extends Component {
   render() {
-    const { data, autoFocus, weekend, day, name, ethereal } = this.props;
+    const { data, weekend, day, name, ethereal } = this.props;
 
     return (
       <section
@@ -283,7 +280,6 @@ class Entry extends Component {
                     <Textarea
                       className="textarea"
                       id={key}
-                      autoFocus={!isReminder && autoFocus}
                       value={value}
                       onChange={update}
                       onFocus={this.activate}
