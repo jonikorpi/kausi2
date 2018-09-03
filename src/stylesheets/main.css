@@ -139,11 +139,15 @@ body {
 }
 
 .editor.auto-hide {
-  display: none;
+  visibility: hidden;
+  position: absolute;
+  pointer-events: none;
 }
 
 .entry:focus-within .editor {
-  display: block;
+  visibility: visible;
+  position: initial;
+  pointer-events: initial;
 }
 
 .editor + .editor {
