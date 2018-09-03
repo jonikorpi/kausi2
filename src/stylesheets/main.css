@@ -1,6 +1,6 @@
 html {
   --collapsed-height: 2.5rem;
-  font-size: 134.375%;
+  font-size: 133.333333333%;
   color: black;
   background-color: #aaa;
 }
@@ -65,10 +65,16 @@ body {
 }
 
 .section {
+  overflow: hidden;
+  padding: 0.75rem;
 }
 
 .section + .section {
   border-top: 0.17rem solid;
+}
+
+.section > * + * {
+  margin-top: 0.5rem;
 }
 
 .section-title {
@@ -87,8 +93,6 @@ body {
   display: grid;
   grid-template: auto / repeat(var(--gridWidth), 1fr);
   width: 100%;
-  border-top: 1px solid;
-  overflow: hidden;
 }
 
 .grid > *:first-child {
@@ -96,29 +100,42 @@ body {
 }
 
 .entry {
-  background-color: white;
-  box-shadow: 0 0 2rem white, 0 0 2rem white;
   min-width: 0;
-  overflow: hidden;
+  display: grid;
 }
 
 .entry.weekend {
-  background-color: #eee;
-  box-shadow: 0 0 2rem #eee, 0 0 2rem #eee;
 }
 
 .entry:focus-within {
   width: fit-content;
   z-index: 2;
   position: relative;
+  margin-right: -1px;
 }
 
 .entry-body {
   width: calc(100vw - 4rem);
   max-width: 25rem;
+  border-radius: 0.25rem;
+  border: 0 solid;
+  /* border-width: 1px 1px 1px 0; */
+  border-width: 1px;
+  background-color: white;
+  display: grid;
+  align-content: start;
+}
+
+.entry:nth-child(7n - 6) .entry-body {
+  border-width: 1px;
 }
 
 .editor {
+  align-self: start;
+}
+
+.editor:last-child {
+  align-self: stretch;
 }
 
 .editor.auto-hide {
@@ -127,24 +144,26 @@ body {
 
 .entry:focus-within .editor {
   display: block;
-  background-color: yellow;
 }
 
 .editor + .editor {
+  border-top: 1px solid;
 }
 
 .editor-title {
   /* position: absolute; */
   display: block;
   cursor: text;
+  padding: 0.25rem 0.25rem 0;
 }
 
 .textarea {
   width: 100%;
   resize: none;
   font-family: monospace, monospace;
-  min-height: 3rem;
+  min-height: 1rem;
   outline: none;
+  padding: 0.25rem;
 }
 
 .editor + .editor textarea {
