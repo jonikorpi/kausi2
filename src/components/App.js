@@ -210,8 +210,6 @@ class Entry extends Component {
                       id={key}
                       value={value}
                       onChange={update}
-                      onFocus={this.activate}
-                      onBlur={this.deactivate}
                       minRows={3}
                     />
                   </div>
