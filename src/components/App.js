@@ -128,15 +128,37 @@ class Calendar extends Component {
                   {week.map(day => (
                     <Entry
                       key={format(day, "dd-MM-YYYY")}
-                      data={[
+                      classNames={{
+                        weekend: isWeekend(day),
+                        ethereal: !isSameMonth(month, day),
+                        isToday: isSameDay(day, today),
+                        hasTitle: !!day,
+                      }}
+                    >
+                      {[
                         "calendar/" + format(day, "YYYY/MM/dd") + ".txt",
                         // "reminders/" + format(day, "MM/dd") + ".txt",
-                      ]}
-                      weekend={isWeekend(day)}
-                      ethereal={!isSameMonth(month, day)}
-                      day={day}
-                      isToday={isSameDay(day, today)}
-                    />
+                      ].map(key => (
+                        <Data path={key} key={key}>
+                          {(value, update) => {
+                            return (
+                              <div className="editor">
+                                <label htmlFor={key} className="editor-title">
+                                  {format(day, "dd EEE")}
+                                </label>
+                                <Textarea
+                                  className="textarea"
+                                  id={key}
+                                  value={value}
+                                  onChange={update}
+                                  minRows={3}
+                                />
+                              </div>
+                            );
+                          }}
+                        </Data>
+                      ))}
+                    </Entry>
                   ))}
                 </div>
               ))}
@@ -164,11 +186,25 @@ const Lists = () => {
       {Object.values(groups).map((entries, index) => (
         <div key={index} className="grid" style={{ "--gridWidth": 5 }}>
           {entries.map(entry => (
-            <Entry
-              key={entry + 1}
-              name={"Entry " + (entry + 1)}
-              data={["lists/" + (entry + 1) + ".txt"]}
-            />
+            <Entry key={entry} classNames={{ "no-title": true }}>
+              {["lists/" + (entry + 1) + ".txt"].map(key => (
+                <Data path={key} key={key}>
+                  {(value, update) => {
+                    return (
+                      <div className="editor">
+                        <Textarea
+                          className="textarea"
+                          id={key}
+                          value={value}
+                          onChange={update}
+                          minRows={3}
+                        />
+                      </div>
+                    );
+                  }}
+                </Data>
+              ))}
+            </Entry>
           ))}
         </div>
       ))}
@@ -176,51 +212,19 @@ const Lists = () => {
   );
 };
 
-class Entry extends Component {
-  render() {
-    const { data, weekend, day, name, ethereal, isToday } = this.props;
+const Entry = ({ children, classNames = {} }) => {
+  const classes = [
+    "entry",
+    ...Object.entries(classNames)
+      .filter(className => className[1])
+      .map(className => className[0]),
+  ];
 
-    return (
-      <section
-        className={`
-          entry 
-          ${weekend ? "weekend" : "not-weekend"}
-          ${ethereal ? "ethereal" : "not-ethereal"}
-          ${isToday ? "today" : "not-today"}
-        `}
-      >
-        <div className="entry-body">
-          {data.map(key => (
-            <Data path={key} key={key}>
-              {(value, update) => {
-                return (
-                  <div
-                    className={`
-                      editor
-                      ${day ? "has-title" : "no-title"}
-                    `}
-                  >
-                    {day && (
-                      <label htmlFor={key} className="editor-title">
-                        {format(day, "dd EEE")}
-                      </label>
-                    )}
-                    <Textarea
-                      className="textarea"
-                      id={key}
-                      value={value}
-                      onChange={update}
-                      minRows={3}
-                    />
-                  </div>
-                );
-              }}
-            </Data>
-          ))}
-        </div>
-      </section>
-    );
-  }
-}
+  return (
+    <section className={classes.join(" ")}>
+      <div className="entry-body">{children}</div>
+    </section>
+  );
+};
 
 export default App;
