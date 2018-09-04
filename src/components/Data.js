@@ -11,20 +11,18 @@ const findHashtags = word =>
   findHashtag(word, "#yearly");
 
 class Data extends PureComponent {
-  state = { value: "", ready: false };
+  state = { value: "" };
 
   componentDidMount() {
     const { path } = this.props;
 
-    database.on("ready", () => {
-      storage.client.on("change", event => {
-        if (event.relativePath === path) {
-          this.handleEvent(event);
-        }
-      });
-
-      this.setState({ ready: true }, () => storage.client.getFile(path));
+    storage.client.on("change", event => {
+      if (event.relativePath === path) {
+        this.handleEvent(event);
+      }
     });
+
+    storage.client.getFile(path);
   }
 
   handleEvent = event => {
@@ -52,11 +50,9 @@ class Data extends PureComponent {
   updateStorage = debounce(this.commitUpdateStorage, 1000);
 
   update = event => {
-    if (this.state.ready) {
-      const value = event.nativeEvent.target.value;
-      this.setState({ value: value });
-      this.updateStorage(value);
-    }
+    const value = event.nativeEvent.target.value;
+    this.setState({ value: value });
+    this.updateStorage(value);
   };
 
   render() {

@@ -19,13 +19,31 @@ import {
 } from "date-fns/esm";
 
 import Data from "../components/Data";
+import DayData from "../components/DayData";
+
+import { database } from "../utilities/remotestorage.js";
 
 const startOfToday = () => startOfDay(Date.now());
 const endOfToday = () => endOfDay(Date.now());
 
+const pathsFromDay = day => ({
+  yearly: `repeating/yearlies/${format(day, "MM")}/${format(day, "dd")}.txt`,
+  monthly: "repeating/monthlies/" + format(day, "dd") + ".txt",
+  weekly: "repeating/weeklies/" + format(day, "EEEE") + ".txt",
+  daily: "repeating/dailies.txt",
+  calendar: `calendar/${format(day, "YYYY")}/${format(day, "MM")}/${format(
+    day,
+    "dd"
+  )}.txt`,
+});
+
 class App extends Component {
+  state = { databaseReady: false };
+
   componentDidMount() {
     document.addEventListener("keydown", this.handleKeyDown);
+
+    database.on("ready", () => this.setState({ databaseReady: true }));
   }
 
   componentWillUnmount() {
@@ -39,7 +57,7 @@ class App extends Component {
   };
 
   render() {
-    return (
+    return this.state.databaseReady ? (
       <Fragment>
         <article className="panel calendar">
           <Calendar />
@@ -49,7 +67,7 @@ class App extends Component {
           <Lists />
         </article>
       </Fragment>
-    );
+    ) : null;
   }
 }
 
@@ -125,21 +143,19 @@ class Calendar extends Component {
               <h1 className="section-title">{format(month, "MMMM MM/YYYY")}</h1>
               {Object.values(weeks).map((week, index) => (
                 <div key={index} className="grid">
-                  {week.map(day => (
-                    <Entry
-                      key={format(day, "dd-MM-YYYY")}
-                      classNames={{
-                        weekend: isWeekend(day),
-                        ethereal: !isSameMonth(month, day),
-                        isToday: isSameDay(day, today),
-                        hasTitle: !!day,
-                      }}
-                    >
-                      {[
-                        "calendar/" + format(day, "YYYY/MM/dd") + ".txt",
-                        // "reminders/" + format(day, "MM/dd") + ".txt",
-                      ].map(key => (
-                        <Data path={key} key={key}>
+                  {week.map(day => {
+                    const key = format(day, "dd-MM-YYYY");
+                    return (
+                      <Entry
+                        key={key}
+                        classNames={{
+                          weekend: isWeekend(day),
+                          ethereal: !isSameMonth(month, day),
+                          isToday: isSameDay(day, today),
+                          hasTitle: !!day,
+                        }}
+                      >
+                        <DayData paths={pathsFromDay(day)}>
                           {(value, update) => {
                             return (
                               <div className="editor">
@@ -156,10 +172,10 @@ class Calendar extends Component {
                               </div>
                             );
                           }}
-                        </Data>
-                      ))}
-                    </Entry>
-                  ))}
+                        </DayData>
+                      </Entry>
+                    );
+                  })}
                 </div>
               ))}
             </section>
