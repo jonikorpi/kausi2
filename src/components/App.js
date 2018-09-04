@@ -204,11 +204,12 @@ class Calendar extends Component {
                       key={format(day, "dd-MM-YYYY")}
                       data={[
                         "calendar/" + format(day, "YYYY/MM/dd") + ".txt",
-                        "reminders/" + format(day, "MM/dd") + ".txt",
+                        // "reminders/" + format(day, "MM/dd") + ".txt",
                       ]}
                       weekend={isWeekend(day)}
                       ethereal={!isSameMonth(month, day)}
                       day={day}
+                      isToday={isSameDay(day, today)}
                     />
                   ))}
                 </div>
@@ -251,7 +252,7 @@ const Lists = () => {
 
 class Entry extends Component {
   render() {
-    const { data, weekend, day, name, ethereal } = this.props;
+    const { data, weekend, day, name, ethereal, isToday } = this.props;
 
     return (
       <section
@@ -281,7 +282,8 @@ class Entry extends Component {
                           ? name
                           : isReminder
                             ? `Every year: ${format(day, "MMM do")}`
-                            : format(day, "dd EEE")}
+                            : (isToday ? "(Today) " : "") +
+                              format(day, "dd EEE")}
                       </h2>
                     </label>
                     <Textarea
@@ -291,7 +293,7 @@ class Entry extends Component {
                       onChange={update}
                       onFocus={this.activate}
                       onBlur={this.deactivate}
-                      minRows={isReminder ? 1 : 3}
+                      minRows={isReminder ? 1 : 2}
                     />
                   </div>
                 );

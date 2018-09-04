@@ -34,7 +34,9 @@ const storage = database.kausi;
 
 database.on("ready", async () => {
   storage.client.on("change", event => {
-    console.log(event);
+    if (event.origin === "conflict") {
+      console.log(event);
+    }
   });
 });
 
