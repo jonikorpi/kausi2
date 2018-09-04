@@ -58,11 +58,9 @@ body {
   display: grid;
   position: relative;
 }
-
 .entry.weekend {
   /* color: red; */
 }
-
 .entry.ethereal {
   color: #999;
   font-style: italic;
@@ -89,23 +87,10 @@ body {
   background-color: white;
   display: grid;
 }
+.today .entry-body {
+}
 
 .editor {
-}
-
-.editor.reminder {
-}
-
-.editor.auto-hide {
-  visibility: hidden;
-  position: absolute;
-  pointer-events: none;
-}
-
-.entry:focus-within .editor {
-  visibility: visible;
-  position: initial;
-  pointer-events: initial;
 }
 
 .editor + .editor {
@@ -119,8 +104,9 @@ body {
   pointer-events: none;
   padding: 0.5rem;
   font-weight: bold;
+  font-size: 0.6rem;
   /* letter-spacing: 1px; */
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
 }
 
 .textarea {
@@ -132,4 +118,7 @@ body {
   position: relative;
   overflow: visible;
   /* font-family: "IBM Plex Mono", monospace, monospace; */
+}
+.no-title .textarea {
+  padding-top: 0.5rem;
 }

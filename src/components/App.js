@@ -159,14 +159,14 @@ const Lists = () => {
 
   return (
     <section className="section">
-      <h1 className="section-title">Lists</h1>
+      <h1 className="section-title">Lists or whatever</h1>
 
       {Object.values(groups).map((entries, index) => (
         <div key={index} className="grid" style={{ "--gridWidth": 5 }}>
           {entries.map(entry => (
             <Entry
               key={entry + 1}
-              name={"List" + entry + 1}
+              name={"Entry " + (entry + 1)}
               data={["lists/" + (entry + 1) + ".txt"]}
             />
           ))}
@@ -186,32 +186,25 @@ class Entry extends Component {
           entry 
           ${weekend ? "weekend" : "not-weekend"}
           ${ethereal ? "ethereal" : "not-ethereal"}
+          ${isToday ? "today" : "not-today"}
         `}
       >
         <div className="entry-body">
           {data.map(key => (
             <Data path={key} key={key}>
               {(value, update) => {
-                const isReminder = key.split("/")[0] === "reminders";
-                const shouldAutoHide = !value && isReminder;
                 return (
                   <div
                     className={`
-                      editor 
-                      ${shouldAutoHide ? "auto-hide" : "always-visible"}
-                      ${isReminder ? "reminder" : "regular"}
+                      editor
+                      ${day ? "has-title" : "no-title"}
                     `}
                   >
-                    <label htmlFor={key} className="editor-title">
-                      <h2>
-                        {name
-                          ? name
-                          : isReminder
-                            ? `Every year: ${format(day, "MMM do")}`
-                            : (isToday ? "(Today) " : "") +
-                              format(day, "dd EEE")}
-                      </h2>
-                    </label>
+                    {day && (
+                      <label htmlFor={key} className="editor-title">
+                        {format(day, "dd EEE")}
+                      </label>
+                    )}
                     <Textarea
                       className="textarea"
                       id={key}
@@ -219,7 +212,7 @@ class Entry extends Component {
                       onChange={update}
                       onFocus={this.activate}
                       onBlur={this.deactivate}
-                      minRows={isReminder ? 1 : 2}
+                      minRows={3}
                     />
                   </div>
                 );
