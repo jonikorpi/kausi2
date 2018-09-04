@@ -1,7 +1,5 @@
 html {
-  --collapsed-height: 3rem;
   --lineHeight: 1.414;
-  font-family: "IBM Plex Mono", monospace, monospace;
   font-size: calc(100% * var(--lineHeight));
   color: black;
   background-color: white;
@@ -13,66 +11,16 @@ body {
 }
 
 .panel {
-  position: relative;
-  transition: transform 262ms ease-out;
 }
 
-.panel.active {
-  z-index: 0;
-  min-height: calc(100vh - var(--collapsed-height));
-  transform: none;
-}
-
-.panel.inactive {
-  height: var(--collapsed-height);
-  overflow: hidden;
-  position: fixed;
-  left: 0;
-  right: 0;
-  z-index: 1;
-  transition: none;
+.panel + .panel {
+  border-top: 0.125rem solid;
 }
 
 .calendar {
-  background-color: hsl(53, 91%, 91%);
-}
-.calendar.active {
-  margin-top: var(--collapsed-height);
-}
-.calendar.inactive {
-  bottom: 0.5rem;
-  transform: translateY(0.5rem);
 }
 
 .lists {
-  background-color: hsl(183, 61.8%, 85.4%);
-}
-
-.lists.active {
-  margin-bottom: var(--collapsed-height);
-}
-.lists.inactive {
-  top: 0.5rem;
-  transform: translateY(-0.5rem);
-}
-
-.clicker {
-  position: fixed;
-  left: 0;
-  z-index: 2;
-  width: 100%;
-  height: var(--collapsed-height);
-  outline: none;
-  box-shadow: 0 0 2rem hsla(0, 0%, 0%, 0.236);
-}
-.clicker:hover {
-  background-color: hsla(40, 100%, 61.8%, 0.5);
-}
-.clicker.top {
-  top: 0;
-}
-.clicker.bottom {
-  bottom: 0;
 }
 
 .section {
@@ -169,12 +117,10 @@ body {
   position: absolute;
   white-space: nowrap;
   pointer-events: none;
-  padding: 0.5rem 0.5rem 0;
-  font-size: 0.5rem;
-  line-height: 0.5rem;
-  font-weight: 600;
-  letter-spacing: 1px;
-  text-transform: uppercase;
+  padding: 0.5rem;
+  font-weight: bold;
+  /* letter-spacing: 1px; */
+  /* text-transform: uppercase; */
 }
 
 .textarea {
@@ -182,7 +128,8 @@ body {
   resize: none;
   min-height: 100%;
   outline: none;
-  padding: 1.375rem 0.5rem 0.5rem;
+  padding: 1.5rem 0.5rem 0.5rem;
   position: relative;
   overflow: visible;
+  /* font-family: "IBM Plex Mono", monospace, monospace; */
 }

@@ -24,12 +24,6 @@ const startOfToday = () => startOfDay(Date.now());
 const endOfToday = () => endOfDay(Date.now());
 
 class App extends Component {
-  state = {
-    activePanel: "calendar",
-    calendarScrolledTo: 0,
-    listsScrolledTo: 0,
-  };
-
   componentDidMount() {
     document.addEventListener("keydown", this.handleKeyDown);
   }
@@ -44,68 +38,16 @@ class App extends Component {
     }
   };
 
-  activateCalendar = () => {
-    const scrollTo = this.state.calendarScrolledTo;
-    this.setState(
-      {
-        activePanel: "calendar",
-        calendarScrolledTo: 0,
-        listsScrolledTo: window.scrollY,
-      },
-      () => {
-        window.scrollTo(0, scrollTo);
-        this.lists.scrollTop = this.state.listsScrolledTo;
-      }
-    );
-  };
-  activateLists = () => {
-    const scrollTo = this.state.listsScrolledTo;
-    this.setState(
-      {
-        activePanel: "lists",
-        listsScrolledTo: 0,
-        calendarScrolledTo: window.scrollY,
-      },
-      () => {
-        window.scrollTo(0, scrollTo);
-        this.calendar.scrollTop = this.state.calendarScrolledTo;
-      }
-    );
-  };
-
   render() {
-    const { activePanel, calendarScrolledTo, listsScrolledTo } = this.state;
-
     return (
       <Fragment>
-        <article
-          ref={element => (this.calendar = element)}
-          className={`panel calendar ${
-            activePanel === "calendar" ? "active" : "inactive"
-          }`}
-        >
+        <article className="panel calendar">
           <Calendar />
         </article>
 
-        <article
-          ref={element => (this.lists = element)}
-          className={`panel lists ${
-            activePanel === "lists" ? "active" : "inactive"
-          }`}
-        >
+        <article className="panel lists">
           <Lists />
         </article>
-
-        <button
-          type="button"
-          className={`clicker ${activePanel === "calendar" ? "top" : "bottom"}`}
-          title={`Expand ${activePanel === "calendar" ? "lists" : "calendar"}`}
-          onClick={
-            activePanel === "calendar"
-              ? this.activateLists
-              : this.activateCalendar
-          }
-        />
       </Fragment>
     );
   }
@@ -181,22 +123,6 @@ class Calendar extends Component {
           return (
             <section className="section month" key={format(month, "MM-YYYY")}>
               <h1 className="section-title">{format(month, "MMMM MM/YYYY")}</h1>
-              <div className="grid" style={{ "--gridWidth": 3 }}>
-                {[...Array(3)].map((value, index) => (
-                  <Entry
-                    key={index + 1}
-                    name={"Month" + index + 1}
-                    data={[
-                      "calendar/" +
-                        format(month, "YYYY/MM") +
-                        "/month/" +
-                        (index + 1) +
-                        ".txt",
-                    ]}
-                  />
-                ))}
-              </div>
-
               {Object.values(weeks).map((week, index) => (
                 <div key={index} className="grid">
                   {week.map(day => (
@@ -223,7 +149,7 @@ class Calendar extends Component {
 }
 
 const Lists = () => {
-  const entries = [...Array(50)].map((value, index) => index);
+  const entries = [...Array(20)].map((value, index) => index);
   const groups = entries.reduce((groups, entry) => {
     const group = Math.floor(entry / 5);
     groups[group] = groups[group] || [];
