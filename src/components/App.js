@@ -8,7 +8,7 @@ import {
   subDays,
   format,
   getDaysInMonth,
-  getWeek,
+  getWeekOfMonth,
   differenceInMilliseconds,
   isSameDay,
   isSameMonth,
@@ -22,7 +22,7 @@ import DayData from "../components/DayData";
 
 import { database } from "../utilities/remotestorage.js";
 
-const dateOptions = { weekStartsOn: 1 };
+const dateOptions = { weekStartsOn: 2 };
 const startOfToday = () => startOfDay(Date.now());
 const endOfToday = () => endOfDay(Date.now());
 
@@ -157,19 +157,12 @@ class Calendar extends Component {
       addDays(month, index)
     );
 
-    let weeks = [];
-    let lastUsedWeek = null;
-    let lastUsedWeekIndex = null;
-    days.forEach(day => {
-      const week = getWeek(day, dateOptions);
-
-      if (week !== lastUsedWeek) {
-        lastUsedWeekIndex = weeks.push([]) - 1;
-        lastUsedWeek = week;
-      }
-
-      weeks[lastUsedWeekIndex].push(day);
-    });
+    const weeks = days.reduce((weeks, day) => {
+      const week = getWeekOfMonth(day, dateOptions) - 1;
+      weeks[week] = weeks[week] || [];
+      weeks[week].push(day);
+      return weeks;
+    }, []);
 
     const firstWeek = weeks[0];
     const lastWeek = weeks[weeks.length - 1];
