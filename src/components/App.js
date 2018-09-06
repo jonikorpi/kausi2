@@ -171,8 +171,6 @@ class Calendar extends Component {
       weeks[lastUsedWeekIndex].push(day);
     });
 
-    console.log(weeks);
-
     const firstWeek = weeks[0];
     const lastWeek = weeks[weeks.length - 1];
 
