@@ -30,6 +30,7 @@ class DayData extends Component {
 
   componentDidMount() {
     const paths = Object.values(this.props.paths);
+    this.mounted = true;
 
     storage.client.on("change", this.handleEvent);
     paths.forEach(path =>
@@ -40,6 +41,7 @@ class DayData extends Component {
   }
 
   componentWillUnmount() {
+    this.mounted = false;
     storage.client.off("change", this.handleEvent);
   }
 
@@ -53,6 +55,10 @@ class DayData extends Component {
   };
 
   updateStateFromEvent = (path, value) => {
+    if (!this.mounted) {
+      return;
+    }
+
     const state = { ...this.state, [path]: value };
     const paths = Object.values(this.props.paths);
     const lines = paths
