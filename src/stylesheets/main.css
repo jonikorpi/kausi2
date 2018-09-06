@@ -38,8 +38,51 @@ body {
 
 .section-title {
   font-weight: bold;
-  line-height: 1rem;
+  line-height: 1.25rem;
   font-size: 1.25rem;
+}
+
+.selector {
+  border-bottom: 0.125rem solid;
+  display: inline-block;
+  position: relative;
+}
+
+.selector + .selector {
+  margin-left: 0.5rem;
+}
+
+.selector select {
+  appearance: none;
+  padding-right: 0.75em;
+}
+
+.year-selector,
+.month-selector {
+  appearance: none;
+}
+
+.year-selector::after,
+.month-selector::after {
+  content: "";
+  display: block;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  height: 0;
+  transform: translateY(-35%);
+  border: 0.25em solid transparent;
+  border-top-color: currentcolor;
+  border-top-width: 0.375em;
+  border-bottom-width: 0;
+  pointer-events: none;
+}
+
+.selector:hover,
+.selector:focus {
+  background: hsl(211, 94.4%, 94.4%);
+  border-color: hsl(211, 94.4%, 61.8%);
+  color: black;
 }
 
 .inactive .section-title {
