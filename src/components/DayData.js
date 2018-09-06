@@ -32,7 +32,11 @@ class DayData extends Component {
     const paths = Object.values(this.props.paths);
 
     storage.client.on("change", this.handleEvent);
-    paths.forEach(path => storage.client.getFile(path));
+    paths.forEach(path =>
+      storage.client
+        .getFile(path)
+        .then(({ data }) => this.updateStateFromEvent(path, data))
+    );
   }
 
   componentWillUnmount() {
@@ -44,21 +48,18 @@ class DayData extends Component {
 
     if (paths.includes(event.relativePath)) {
       const { newValue } = event;
-      this.setState(
-        state => ({ ...state, [event.relativePath]: newValue }),
-        this.updateValueFromEvents
-      );
+      this.updateStateFromEvent(event.relativePath, newValue);
     }
   };
 
-  commitValueFromEvents = () => {
+  updateStateFromEvent = (path, value) => {
+    const state = { ...this.state, [path]: value };
     const paths = Object.values(this.props.paths);
     const lines = paths
-      .map(path => this.state[path])
+      .map(path => state[path])
       .filter(value => value || value === "");
-    this.setState({ value: lines.join("\n") });
+    this.setState({ ...state, value: lines.join("\n") });
   };
-  updateValueFromEvents = debounce(this.commitValueFromEvents, 50);
 
   commitUpdateStorage = value => {
     const { paths } = this.props;
