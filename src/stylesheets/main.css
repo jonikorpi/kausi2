@@ -1,8 +1,31 @@
 html {
   --lineHeight: 1.414;
+  --backgroundColor: white;
+  --color: black;
+  --asideColor: #888;
+  --spacing: 0.5rem;
+  --largeSpacing: 1rem;
+  --outerSpacing: 0.25rem;
+
   font-size: calc(100% * var(--lineHeight));
-  color: black;
-  background-color: white;
+  color: var(--color);
+  background-color: var(--backgroundColor);
+}
+
+@media (min-width: 40em) {
+  html {
+    --spacing: 0.75rem;
+    --largeSpacing: 1rem;
+    --outerSpacing: 1rem;
+  }
+}
+
+@media (min-width: 75em) {
+  html {
+    --spacing: 1rem;
+    --largeSpacing: 1rem;
+    --outerSpacing: 1.5rem;
+  }
 }
 
 body {
@@ -25,15 +48,16 @@ body {
 
 .section {
   overflow: hidden;
-  padding: 1.5rem 1.5rem;
+  padding: var(--outerSpacing);
 }
 
 .section + .section {
   border-top: 0.17rem solid;
 }
 
-.section > * + * {
-  margin-top: 1rem;
+.section > * + *,
+.grids > * + * {
+  margin-top: var(--largeSpacing);
 }
 
 .section-title {
@@ -89,6 +113,9 @@ body {
   text-decoration: underline;
 }
 
+.grids {
+}
+
 .grid {
   --gridWidth: 7;
   display: grid;
@@ -105,12 +132,11 @@ body {
   /* color: red; */
 }
 .entry.ethereal {
-  color: #999;
-  font-style: italic;
+  color: var(--asideColor);
 }
 
-.section:focus-within .entry {
-  color: #999;
+.grids:focus-within .entry {
+  color: var(--asideColor);
 }
 
 .entry.entry:focus-within {
@@ -118,18 +144,24 @@ body {
   z-index: 2;
   position: relative;
   margin-right: -1px;
-  color: black;
-  box-shadow: 0 0 2rem hsla(0, 0%, 0%, 0.236);
+  color: var(--color);
 }
 
 .entry-body {
-  width: calc(100vw - 2rem);
-  max-width: 30rem;
-  border-radius: 0.25rem;
-  border: 1px solid;
-  background-color: white;
   display: grid;
+  width: calc(100vw - var(--spacing) * 4 - var(--outerSpacing) * 2);
+  max-width: 30rem;
+  display: grid;
+  border-radius: 0.375rem;
+  border: 1px solid;
+  background-color: var(--backgroundColor);
+  box-shadow: -1px 0 0 var(--backgroundColor);
 }
+
+.entry-body:focus-within {
+  box-shadow: 0 0 3rem hsla(0, 0%, 0%, 0.236);
+}
+
 .today .entry-body {
 }
 
@@ -145,7 +177,7 @@ body {
   position: absolute;
   white-space: nowrap;
   pointer-events: none;
-  padding: 0.5rem;
+  padding: var(--spacing);
   font-weight: bold;
   font-size: 0.6rem;
   /* letter-spacing: 1px; */
@@ -157,11 +189,11 @@ body {
   resize: none;
   min-height: 100%;
   outline: none;
-  padding: 1.5rem 0.5rem 0.5rem;
+  padding: calc(1rem + var(--spacing)) var(--spacing) var(--spacing);
   position: relative;
   overflow: visible;
   /* font-family: "IBM Plex Mono", monospace, monospace; */
 }
 .no-title .textarea {
-  padding-top: 0.5rem;
+  padding-top: var(--spacing);
 }

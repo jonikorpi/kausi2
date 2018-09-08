@@ -209,43 +209,45 @@ class Calendar extends Component {
           )}
         </div>
 
-        {Object.values(weeks).map((week, index) => (
-          <div key={index} className="grid">
-            {week.map(day => {
-              const key = format(day, "dd-MM-YYYY");
-              return (
-                <Entry
-                  key={key}
-                  classNames={{
-                    weekend: isWeekend(day),
-                    ethereal: !isSameMonth(month, day),
-                    isToday: isSameDay(day, today),
-                    hasTitle: !!day,
-                  }}
-                >
-                  <DayData paths={pathsFromDay(day)}>
-                    {(value, update) => {
-                      return (
-                        <div className="editor">
-                          <label htmlFor={key} className="editor-title">
-                            {format(day, "dd EEE")}
-                          </label>
-                          <Textarea
-                            className="textarea"
-                            id={key}
-                            value={value}
-                            onChange={update}
-                            minRows={3}
-                          />
-                        </div>
-                      );
+        <div className="grids">
+          {Object.values(weeks).map((week, index) => (
+            <div key={index} className="grid">
+              {week.map(day => {
+                const key = format(day, "dd-MM-YYYY");
+                return (
+                  <Entry
+                    key={key}
+                    classNames={{
+                      weekend: isWeekend(day),
+                      ethereal: !isSameMonth(month, day),
+                      isToday: isSameDay(day, today),
+                      hasTitle: !!day,
                     }}
-                  </DayData>
-                </Entry>
-              );
-            })}
-          </div>
-        ))}
+                  >
+                    <DayData paths={pathsFromDay(day)}>
+                      {(value, update) => {
+                        return (
+                          <div className="editor">
+                            <label htmlFor={key} className="editor-title">
+                              {format(day, "dd EEE")}
+                            </label>
+                            <Textarea
+                              className="textarea"
+                              id={key}
+                              value={value}
+                              onChange={update}
+                              minRows={3}
+                            />
+                          </div>
+                        );
+                      }}
+                    </DayData>
+                  </Entry>
+                );
+              })}
+            </div>
+          ))}
+        </div>
       </article>
     );
   }
@@ -264,31 +266,33 @@ const Lists = () => {
     <article className="lists section">
       <h1 className="section-title">Lists or whatever</h1>
 
-      {Object.values(groups).map((entries, index) => (
-        <div key={index} className="grid" style={{ "--gridWidth": 5 }}>
-          {entries.map(entry => (
-            <Entry key={entry} classNames={{ "no-title": true }}>
-              {["lists/" + (entry + 1) + ".txt"].map(key => (
-                <Data path={key} key={key}>
-                  {(value, update) => {
-                    return (
-                      <div className="editor">
-                        <Textarea
-                          className="textarea"
-                          id={key}
-                          value={value}
-                          onChange={update}
-                          minRows={3}
-                        />
-                      </div>
-                    );
-                  }}
-                </Data>
-              ))}
-            </Entry>
-          ))}
-        </div>
-      ))}
+      <div className="grids">
+        {Object.values(groups).map((entries, index) => (
+          <div key={index} className="grid" style={{ "--gridWidth": 5 }}>
+            {entries.map(entry => (
+              <Entry key={entry} classNames={{ "no-title": true }}>
+                {["lists/" + (entry + 1) + ".txt"].map(key => (
+                  <Data path={key} key={key}>
+                    {(value, update) => {
+                      return (
+                        <div className="editor">
+                          <Textarea
+                            className="textarea"
+                            id={key}
+                            value={value}
+                            onChange={update}
+                            minRows={3}
+                          />
+                        </div>
+                      );
+                    }}
+                  </Data>
+                ))}
+              </Entry>
+            ))}
+          </div>
+        ))}
+      </div>
     </article>
   );
 };
