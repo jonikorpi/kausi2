@@ -90,13 +90,12 @@ class App extends Component {
   render() {
     return this.state.databaseReady ? (
       <Fragment>
-        <article className="panel calendar">
-          <Calendar />
-        </article>
-
-        <article className="panel lists">
-          <Lists />
-        </article>
+        <header className="section header">[ ] Kausi</header>
+        <Calendar />
+        <Lists />
+        <footer className="section footer">
+          Privacy policy | Terms of service | Developed by Vuoro Design
+        </footer>
       </Fragment>
     ) : null;
   }
@@ -182,7 +181,7 @@ class Calendar extends Component {
     }
 
     return (
-      <section className="section month">
+      <article className="section calendar">
         <div className="section-title">
           {monthInputSupported ? (
             <input
@@ -247,7 +246,7 @@ class Calendar extends Component {
             })}
           </div>
         ))}
-      </section>
+      </article>
     );
   }
 }
@@ -262,7 +261,7 @@ const Lists = () => {
   }, {});
 
   return (
-    <section className="section">
+    <article className="lists section">
       <h1 className="section-title">Lists or whatever</h1>
 
       {Object.values(groups).map((entries, index) => (
@@ -290,7 +289,7 @@ const Lists = () => {
           ))}
         </div>
       ))}
-    </section>
+    </article>
   );
 };
 
