@@ -214,13 +214,14 @@ class Calendar extends Component {
             <div key={index} className="grid">
               {week.map(day => {
                 const key = format(day, "dd-MM-YYYY");
+                const isToday = isSameDay(day, today);
                 return (
                   <Entry
                     key={key}
                     classNames={{
                       weekend: isWeekend(day),
                       ethereal: !isSameMonth(month, day),
-                      isToday: isSameDay(day, today),
+                      today: isToday,
                       hasTitle: !!day,
                     }}
                   >
@@ -229,7 +230,13 @@ class Calendar extends Component {
                         return (
                           <div className="editor">
                             <label htmlFor={key} className="editor-title">
-                              {format(day, "dd EEE")}
+                              <span className="weekday">
+                                {format(day, "EEE")}
+                              </span>
+                              <span className="day">{format(day, " dd")}</span>
+                              <span className="month-and-year">
+                                {format(day, " MMMM YYYY")}
+                              </span>
                             </label>
                             <Textarea
                               className="textarea"
@@ -270,7 +277,7 @@ const Lists = () => {
         {Object.values(groups).map((entries, index) => (
           <div key={index} className="grid" style={{ "--gridWidth": 5 }}>
             {entries.map(entry => (
-              <Entry key={entry} classNames={{ "no-title": true }}>
+              <Entry key={entry}>
                 {["lists/" + (entry + 1) + ".txt"].map(key => (
                   <Data path={key} key={key}>
                     {(value, update) => {
