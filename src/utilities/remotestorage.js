@@ -29,6 +29,13 @@ const database = new RemoteStorage({
     conflict: true,
   },
 });
+
+database.setApiKeys({
+  dropbox: "0cnw57tenmut8av",
+  googledrive:
+    "550466432289-m3h005moio5hhgpi18no6npnublfsrp2.apps.googleusercontent.com",
+});
+
 database.access.claim("kausi", "rw");
 const storage = database.kausi;
 

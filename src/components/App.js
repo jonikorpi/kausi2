@@ -19,6 +19,7 @@ import {
 
 import Data from "../components/Data";
 import DayData from "../components/DayData";
+import Menu from "../components/Menu";
 
 import { database } from "../utilities/remotestorage.js";
 
@@ -90,9 +91,12 @@ class App extends Component {
   render() {
     return this.state.databaseReady ? (
       <Fragment>
-        <header className="section header">[ ] Kausi</header>
+        <header className="section header">
+          [ ] Kausi
+          <Menu />
+        </header>
         <Calendar />
-        <Lists />
+        {/* <Lists /> */}
         <footer className="section footer">
           Privacy policy | Terms of service | Developed by Vuoro Design
         </footer>
