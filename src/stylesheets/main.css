@@ -35,13 +35,19 @@ body {
 
 .header {
   display: grid;
+  grid-auto-flow: column;
+  justify-content: space-between;
+  align-items: center;
+  grid-gap: 0.5rem;
+  min-height: calc(2rem + var(--outerSpacing) * 2);
 }
 
 .logo {
   text-transform: uppercase;
   font-weight: bold;
-  font-size: 1.5rem;
-  line-height: 1;
+  font-size: 1.382rem;
+  line-height: 1.5rem;
+  white-space: nowrap;
 }
 
 .logo span {
@@ -61,6 +67,23 @@ body {
   padding-right: 0;
   width: 1em;
   text-indent: 0;
+}
+
+.user {
+  text-align: right;
+  min-width: 0;
+}
+
+.username {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  font-weight: bold;
+}
+
+.underlined {
+  text-decoration: underline;
 }
 
 .panel {
@@ -85,7 +108,6 @@ body {
   border-top: 0.17rem solid;
 }
 
-.section > * + *,
 .grids > * + * {
   margin-top: var(--largeSpacing);
 }
