@@ -18,22 +18,11 @@ import {
 } from "date-fns/esm";
 
 // import ListsData from "../components/ListsData";
-import MonthData from "../components/MonthData";
+import DayData from "../components/DayData";
 
 const dateOptions = { weekStartsOn: 2 };
 const startOfToday = () => startOfDay(Date.now());
 const endOfToday = () => endOfDay(Date.now());
-
-const pathsFromDay = day => ({
-  yearly: `repeating/yearlies/${format(day, "MM")}/${format(day, "dd")}.txt`,
-  monthly: "repeating/monthlies/" + format(day, "dd") + ".txt",
-  weekly: "repeating/weeklies/" + format(day, "EEEE") + ".txt",
-  daily: "repeating/dailies.txt",
-  calendar: `calendar/${format(day, "YYYY")}/${format(day, "MM")}/${format(
-    day,
-    "dd"
-  )}.txt`,
-});
 
 const isMonthInputSupported = () => {
   const monthInputTest = document.createElement("input");
@@ -82,11 +71,12 @@ class App extends Component {
   };
 
   render() {
+    const userID = "testUser";
     return (
       <Fragment>
         <header className="section header">Kausi</header>
-        <Calendar />
-        {/* <Lists /> */}
+        <Calendar userID={userID} />
+        {/* <Lists userID={userID} /> */}
         <footer className="section footer">
           Privacy policy | Terms of service | Developed by Vuoro Design
         </footer>
@@ -144,6 +134,7 @@ class Calendar extends Component {
     });
 
   render() {
+    const { userID } = this.props;
     const { today, month } = this.state;
 
     const days = [...Array(getDaysInMonth(month))].map((value, index) =>
@@ -209,19 +200,19 @@ class Calendar extends Component {
               {week.map(day => {
                 const key = format(day, "dd-MM-YYYY");
                 return (
-                  <MonthData paths={pathsFromDay(day)}>
+                  <DayData key={key + userID} day={day} userID={userID}>
                     {(value, update) => (
                       <DayEntry
-                        key={key}
                         id={key}
                         day={day}
                         value={value}
                         isToday={isSameDay(day, today)}
                         isWeekend={isWeekend(day)}
                         isEthereal={!isSameMonth(month, day)}
+                        onChange={update}
                       />
                     )}
-                  </MonthData>
+                  </DayData>
                 );
               })}
             </div>
@@ -277,9 +268,6 @@ class Calendar extends Component {
 // };
 
 class DayEntry extends React.PureComponent {
-  handleOnChange = event =>
-    this.props.onChange(this.props.id, event.nativeEvent.target.value);
-
   render() {
     const { id, day, value, isToday, isWeekend, isEthereal } = this.props;
     const classes = [
@@ -308,7 +296,7 @@ class DayEntry extends React.PureComponent {
               className="textarea"
               id={id}
               value={value}
-              onChange={this.handleOnChange}
+              onChange={this.props.onChange}
               minRows={3}
             />
           </div>
