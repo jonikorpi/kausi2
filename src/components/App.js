@@ -208,42 +208,20 @@ class Calendar extends Component {
             <div key={index} className="grid">
               {week.map(day => {
                 const key = format(day, "dd-MM-YYYY");
-                const isToday = isSameDay(day, today);
                 return (
-                  <Entry
-                    key={key}
-                    classNames={{
-                      weekend: isWeekend(day),
-                      ethereal: !isSameMonth(month, day),
-                      today: isToday,
-                      hasTitle: !!day,
-                    }}
-                  >
-                    <MonthData paths={pathsFromDay(day)}>
-                      {(value, update) => {
-                        return (
-                          <div className="editor">
-                            <label htmlFor={key} className="editor-title">
-                              <span className="weekday">
-                                {format(day, "EEE")}
-                              </span>
-                              <span className="day">{format(day, " dd")}</span>
-                              <span className="month-and-year">
-                                {format(day, " MMMM YYYY")}
-                              </span>
-                            </label>
-                            <Textarea
-                              className="textarea"
-                              id={key}
-                              value={value}
-                              onChange={update}
-                              minRows={3}
-                            />
-                          </div>
-                        );
-                      }}
-                    </MonthData>
-                  </Entry>
+                  <MonthData paths={pathsFromDay(day)}>
+                    {(value, update) => (
+                      <DayEntry
+                        key={key}
+                        id={key}
+                        day={day}
+                        value={value}
+                        isToday={isSameDay(day, today)}
+                        isWeekend={isWeekend(day)}
+                        isEthereal={!isSameMonth(month, day)}
+                      />
+                    )}
+                  </MonthData>
                 );
               })}
             </div>
@@ -298,19 +276,46 @@ class Calendar extends Component {
 //   );
 // };
 
-const Entry = ({ children, classNames = {} }) => {
-  const classes = [
-    "entry",
-    ...Object.entries(classNames)
-      .filter(className => className[1])
-      .map(className => className[0]),
-  ];
+class DayEntry extends React.PureComponent {
+  handleOnChange = event =>
+    this.props.onChange(this.props.id, event.nativeEvent.target.value);
 
-  return (
-    <section className={classes.join(" ")}>
-      <div className="entry-body">{children}</div>
-    </section>
-  );
-};
+  render() {
+    const { id, day, value, isToday, isWeekend, isEthereal } = this.props;
+    const classes = [
+      "entry",
+      ...Object.entries({
+        today: isToday,
+        weekend: isWeekend,
+        ethereal: isEthereal,
+      })
+        .filter(className => className[1])
+        .map(className => className[0]),
+    ];
+
+    return (
+      <section className={classes.join(" ")}>
+        <div className="entry-body">
+          <div className="editor">
+            <label htmlFor={id} className="editor-title">
+              <span className="weekday">{format(day, "EEE")}</span>
+              <span className="day">{format(day, " dd")}</span>
+              <span className="month-and-year">
+                {format(day, " MMMM YYYY")}
+              </span>
+            </label>
+            <Textarea
+              className="textarea"
+              id={id}
+              value={value}
+              onChange={this.handleOnChange}
+              minRows={3}
+            />
+          </div>
+        </div>
+      </section>
+    );
+  }
+}
 
 export default App;
