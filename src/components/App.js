@@ -19,6 +19,7 @@ import {
 
 // import ListsData from "../components/ListsData";
 import DayData from "../components/DayData";
+import Authentication from "../components/Authentication";
 
 const dateOptions = { weekStartsOn: 2 };
 const startOfToday = () => startOfDay(Date.now());
@@ -71,16 +72,19 @@ class App extends Component {
   };
 
   render() {
-    const userID = "testUser";
     return (
-      <Fragment>
-        <header className="section header">Kausi</header>
-        <Calendar userID={userID} />
-        {/* <Lists userID={userID} /> */}
-        <footer className="section footer">
-          Privacy policy | Terms of service | Developed by Vuoro Design
-        </footer>
-      </Fragment>
+      <Authentication>
+        {({ userID, anonymous, userName }) => (
+          <Fragment>
+            <header className="section header">Kausi</header>
+            <Calendar userID={userID} />
+            {/* <Lists userID={userID} /> */}
+            <footer className="section footer">
+              Privacy policy | Terms of service | Developed by Vuoro Design
+            </footer>
+          </Fragment>
+        )}
+      </Authentication>
     );
   }
 }
@@ -199,20 +203,26 @@ class Calendar extends Component {
             <div key={index} className="grid">
               {week.map(day => {
                 const key = format(day, "dd-MM-YYYY");
-                return (
-                  <DayData key={key + userID} day={day} userID={userID}>
-                    {(value, update) => (
-                      <DayEntry
-                        id={key}
-                        day={day}
-                        value={value}
-                        isToday={isSameDay(day, today)}
-                        isWeekend={isWeekend(day)}
-                        isEthereal={!isSameMonth(month, day)}
-                        onChange={update}
-                      />
-                    )}
+                const entry = (value, update) => (
+                  <DayEntry
+                    key={key}
+                    id={key}
+                    day={day}
+                    value={value}
+                    isToday={isSameDay(day, today)}
+                    isWeekend={isWeekend(day)}
+                    isEthereal={!isSameMonth(month, day)}
+                    onChange={update}
+                    readOnly={!userID}
+                  />
+                );
+
+                return userID ? (
+                  <DayData key={key} day={day} userID={userID}>
+                    {entry}
                   </DayData>
+                ) : (
+                  entry("")
                 );
               })}
             </div>
@@ -269,7 +279,15 @@ class Calendar extends Component {
 
 class DayEntry extends React.PureComponent {
   render() {
-    const { id, day, value, isToday, isWeekend, isEthereal } = this.props;
+    const {
+      id,
+      day,
+      value,
+      isToday,
+      isWeekend,
+      isEthereal,
+      readOnly,
+    } = this.props;
     const classes = [
       "entry",
       ...Object.entries({
@@ -298,6 +316,7 @@ class DayEntry extends React.PureComponent {
               value={value}
               onChange={this.props.onChange}
               minRows={3}
+              readOnly={readOnly}
             />
           </div>
         </div>
