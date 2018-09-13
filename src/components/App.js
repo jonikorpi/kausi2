@@ -74,7 +74,7 @@ class App extends Component {
   render() {
     return (
       <Authentication>
-        {({ userID, anonymous, userName }) => (
+        {({ userID, anonymous, userName, UserUI }) => (
           <Fragment>
             <header className="section header">
               <h1 className="logo">
@@ -82,6 +82,7 @@ class App extends Component {
                   <span key={index}>{letter}</span>
                 ))}
               </h1>
+              {UserUI}
             </header>
             <Calendar userID={userID} />
             {/* <Lists userID={userID} /> */}

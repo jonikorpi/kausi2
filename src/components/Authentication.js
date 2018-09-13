@@ -1,35 +1,33 @@
-import React from "react";
+import React, { Fragment } from "react";
 import firebase from "firebase/app";
 import "firebase/auth";
-import * as firebaseui from "firebaseui";
+import Loadable from "react-loadable";
+import { Router, Link } from "@reach/router";
 
-// var ui = new firebaseui.auth.AuthUI(firebase.auth());
-// const uiConfig = {
-//   signInSuccessUrl: window.location,
-//   autoUpgradeAnonymousUsers: true,
-//   signInOptions: [
-//     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-//     firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-//     firebase.auth.TwitterAuthProvider.PROVIDER_ID,
-//     firebase.auth.GithubAuthProvider.PROVIDER_ID,
-//     firebase.auth.EmailAuthProvider.PROVIDER_ID,
-//     firebase.auth.PhoneAuthProvider.PROVIDER_ID,
-//     firebase.auth.AnonymousAuthProvider.PROVIDER_ID,
-//   ],
-//   tosUrl: "https://github.com/jonikorpi/kausi/blob/master/TERMS_OF_SERVICE.md",
-//   privacyPolicyUrl:
-//     "https://github.com/jonikorpi/kausi/blob/master/PRIVACY_POLICY.md",
-// };
-// ui.start('#firebaseui-auth-container', uiConfig);
-// if (ui.isPendingRedirect()) {
-//   ui.start("#firebaseui-auth-container", uiConfig);
-// }
+const Loading = ({ error, pastDelay }) =>
+  pastDelay || error ? (
+    <Fragment>
+      {error ? (
+        <pre>
+          <code>{error.message}</code>
+        </pre>
+      ) : (
+        "Loading authentication…"
+      )}
+    </Fragment>
+  ) : null;
+
+const FirebaseUI = Loadable({
+  loader: () => import("../components/FirebaseUI"),
+  loading: Loading,
+  timeout: 30000,
+});
 
 class Authentication extends React.Component {
   state = {
     userID: null,
     userName: null,
-    anonymous: "true",
+    anonymous: null,
   };
 
   componentDidMount() {
@@ -39,19 +37,50 @@ class Authentication extends React.Component {
         this.setState({
           userID: uid,
           userName: isAnonymous
-            ? "Temporary account"
+            ? "Guest account"
             : email || (providerData && JSON.stringify(providerData)),
           anonymous: isAnonymous,
         });
       } else {
-        firebase.auth().signInAnonymously();
+        this.setState(
+          { userID: null, userName: null, anonymous: null, showUI: false },
+          firebase.auth().signInAnonymously
+        );
       }
     });
   }
+  signOut = () => firebase.auth().signOut();
 
   render() {
-    return this.props.children(this.state);
+    return (
+      <Fragment>
+        <Router>
+          <FirebaseUI path="authenticate" />
+        </Router>
+        {this.props.children({
+          ...this.state,
+          UserUI: <UserUI {...this.state} />,
+        })}
+      </Fragment>
+    );
   }
 }
+
+const UserUI = ({ userID, userName, anonymous }) => (
+  <nav className="user">
+    {userID ? (
+      <Fragment>
+        {userName}
+        {anonymous ? (
+          <Link to="authenticate">Sign in/Sign up</Link>
+        ) : (
+          <Link to="/">Sign out</Link>
+        )}
+      </Fragment>
+    ) : (
+      "Authenticating…"
+    )}
+  </nav>
+);
 
 export default Authentication;

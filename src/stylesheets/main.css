@@ -33,6 +33,10 @@ body {
   font-size: calc(1rem / var(--lineHeight));
 }
 
+.header {
+  display: grid;
+}
+
 .logo {
   text-transform: uppercase;
   font-weight: bold;
