@@ -33,6 +33,32 @@ body {
   font-size: calc(1rem / var(--lineHeight));
 }
 
+.logo {
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.logo span {
+  border: 1px solid;
+  width: 1.5em;
+  display: inline-block;
+  text-align: center;
+  border-radius: 0.25rem;
+  padding-right: 0.5em;
+  margin-right: -0.5em;
+  text-indent: 0.125em;
+  background-color: var(--backgroundColor);
+}
+
+.logo span:last-child {
+  margin-right: 0;
+  padding-right: 0;
+  width: 1em;
+  text-indent: 0;
+}
+
 .panel {
 }
 

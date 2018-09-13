@@ -76,7 +76,13 @@ class App extends Component {
       <Authentication>
         {({ userID, anonymous, userName }) => (
           <Fragment>
-            <header className="section header">Kausi</header>
+            <header className="section header">
+              <h1 className="logo">
+                {Array.from("Kausi").map((letter, index) => (
+                  <span key={index}>{letter}</span>
+                ))}
+              </h1>
+            </header>
             <Calendar userID={userID} />
             {/* <Lists userID={userID} /> */}
             <footer className="section footer">
