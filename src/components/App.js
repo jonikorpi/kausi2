@@ -17,11 +17,8 @@ import {
   setMonth,
 } from "date-fns/esm";
 
-import Data from "../components/Data";
-import DayData from "../components/DayData";
-import Menu from "../components/Menu";
-
-import { database } from "../utilities/remotestorage.js";
+// import ListsData from "../components/ListsData";
+import MonthData from "../components/MonthData";
 
 const dateOptions = { weekStartsOn: 2 };
 const startOfToday = () => startOfDay(Date.now());
@@ -70,12 +67,8 @@ const getMonthOptions = date => {
 };
 
 class App extends Component {
-  state = { databaseReady: false };
-
   componentDidMount() {
     document.addEventListener("keydown", this.handleKeyDown);
-
-    database.on("ready", () => this.setState({ databaseReady: true }));
   }
 
   componentWillUnmount() {
@@ -89,19 +82,16 @@ class App extends Component {
   };
 
   render() {
-    return this.state.databaseReady ? (
+    return (
       <Fragment>
-        <header className="section header">
-          [ ] Kausi
-          <Menu />
-        </header>
+        <header className="section header">Kausi</header>
         <Calendar />
         {/* <Lists /> */}
         <footer className="section footer">
           Privacy policy | Terms of service | Developed by Vuoro Design
         </footer>
       </Fragment>
-    ) : null;
+    );
   }
 }
 
@@ -229,7 +219,7 @@ class Calendar extends Component {
                       hasTitle: !!day,
                     }}
                   >
-                    <DayData paths={pathsFromDay(day)}>
+                    <MonthData paths={pathsFromDay(day)}>
                       {(value, update) => {
                         return (
                           <div className="editor">
@@ -252,7 +242,7 @@ class Calendar extends Component {
                           </div>
                         );
                       }}
-                    </DayData>
+                    </MonthData>
                   </Entry>
                 );
               })}
@@ -264,49 +254,49 @@ class Calendar extends Component {
   }
 }
 
-const Lists = () => {
-  const entries = [...Array(20)].map((value, index) => index);
-  const groups = entries.reduce((groups, entry) => {
-    const group = Math.floor(entry / 5);
-    groups[group] = groups[group] || [];
-    groups[group].push(entry);
-    return groups;
-  }, {});
+// const Lists = () => {
+//   const entries = [...Array(20)].map((value, index) => index);
+//   const groups = entries.reduce((groups, entry) => {
+//     const group = Math.floor(entry / 5);
+//     groups[group] = groups[group] || [];
+//     groups[group].push(entry);
+//     return groups;
+//   }, {});
 
-  return (
-    <article className="lists section">
-      <h1 className="section-title">Lists or whatever</h1>
+//   return (
+//     <article className="lists section">
+//       <h1 className="section-title">Lists or whatever</h1>
 
-      <div className="grids">
-        {Object.values(groups).map((entries, index) => (
-          <div key={index} className="grid" style={{ "--gridWidth": 5 }}>
-            {entries.map(entry => (
-              <Entry key={entry}>
-                {["lists/" + (entry + 1) + ".txt"].map(key => (
-                  <Data path={key} key={key}>
-                    {(value, update) => {
-                      return (
-                        <div className="editor">
-                          <Textarea
-                            className="textarea"
-                            id={key}
-                            value={value}
-                            onChange={update}
-                            minRows={3}
-                          />
-                        </div>
-                      );
-                    }}
-                  </Data>
-                ))}
-              </Entry>
-            ))}
-          </div>
-        ))}
-      </div>
-    </article>
-  );
-};
+//       <div className="grids">
+//         {Object.values(groups).map((entries, index) => (
+//           <div key={index} className="grid" style={{ "--gridWidth": 5 }}>
+//             {entries.map(entry => (
+//               <Entry key={entry}>
+//                 {["lists/" + (entry + 1) + ".txt"].map(key => (
+//                   <ListsData path={key} key={key}>
+//                     {(value, update) => {
+//                       return (
+//                         <div className="editor">
+//                           <Textarea
+//                             className="textarea"
+//                             id={key}
+//                             value={value}
+//                             onChange={update}
+//                             minRows={3}
+//                           />
+//                         </div>
+//                       );
+//                     }}
+//                   </ListsData>
+//                 ))}
+//               </Entry>
+//             ))}
+//           </div>
+//         ))}
+//       </div>
+//     </article>
+//   );
+// };
 
 const Entry = ({ children, classNames = {} }) => {
   const classes = [

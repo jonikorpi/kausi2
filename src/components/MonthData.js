@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import debounce from "lodash.debounce";
 
-import { database, storage } from "../utilities/remotestorage.js";
+import { firestore } from "../utilities/firestore.js";
 
 const categorizeLine = line => {
   const words = line.split(" ");
@@ -25,7 +25,7 @@ const categorizeLine = line => {
   return "calendar";
 };
 
-class DayData extends Component {
+class MonthData extends Component {
   state = { value: "" };
 
   componentDidMount() {
@@ -98,4 +98,4 @@ class DayData extends Component {
   }
 }
 
-export default DayData;
+export default MonthData;
