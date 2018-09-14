@@ -38,21 +38,26 @@ const uiConfig = {
 };
 
 class Authentication extends React.Component {
-  state = {
-    userID: null,
-    userName: null,
-    anonymous: null,
-  };
-
   componentDidMount() {
     ui.start("#firebaseui-auth-container", uiConfig);
   }
 
   render() {
+    const { userID, anonymous, userName, signOut } = this.props;
+
     return (
       <Fragment>
         <Header>
-          <Link to="/">Back to app</Link>
+          <nav className="user">
+            {userID ? (
+              <React.Fragment className="user">
+                <p className="username">{userName}</p>
+                <Link to="/">Back to app</Link>
+              </React.Fragment>
+            ) : (
+              "Authenticating…"
+            )}
+          </nav>
         </Header>
         <div id="firebaseui-auth-container" />
         <Footer />

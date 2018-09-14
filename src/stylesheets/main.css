@@ -45,8 +45,8 @@ body {
 .logo {
   text-transform: uppercase;
   font-weight: bold;
-  font-size: 1.382rem;
-  line-height: 1.5rem;
+  font-size: 1rem;
+  line-height: 1.125rem;
   white-space: nowrap;
 }
 
@@ -72,6 +72,12 @@ body {
 .user {
   text-align: right;
   min-width: 0;
+}
+
+.user a + a,
+.user a + button,
+.user button + a {
+  margin-left: var(--spacing);
 }
 
 .username {
@@ -106,6 +112,10 @@ body {
 
 .section + .section {
   border-top: 0.17rem solid;
+}
+
+.section > * + * {
+  margin-top: var(--spacing);
 }
 
 .grids > * + * {
@@ -260,5 +270,37 @@ body {
   padding: var(--spacing);
   position: relative;
   overflow: visible;
-  /* font-family: "IBM Plex Mono", monospace, monospace; */
+}
+
+pre {
+  white-space: pre-wrap;
+}
+
+code {
+  font-family: monospace, monospace;
+}
+
+.import-form {
+  display: grid;
+  grid-auto-flow: column;
+  grid-gap: var(--spacing);
+  align-items: center;
+}
+
+.import-field {
+  width: 100%;
+  resize: none;
+  padding: var(--spacing);
+  border: 1px solid;
+  font-size: 0.5rem;
+  line-height: 0.75rem;
+  min-width: 0;
+}
+
+.import-button {
+  background: var(--color);
+  color: var(--backgroundColor);
+  border-radius: 0.25rem;
+  padding: var(--spacing);
+  min-width: 0;
 }

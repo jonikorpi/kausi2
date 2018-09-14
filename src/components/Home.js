@@ -16,8 +16,6 @@ import {
   setYear,
   setMonth,
 } from "date-fns/esm";
-import firebase from "firebase/app";
-import "firebase/auth";
 import { Link } from "@reach/router";
 
 import { Header, Footer } from "../components/App";
@@ -25,36 +23,12 @@ import DayData from "../components/DayData";
 // import ListsData from "../components/ListsData";
 
 class Home extends React.Component {
-  state = {
-    userID: null,
-    userName: null,
-    anonymous: null,
-  };
-
   componentDidMount() {
     document.addEventListener("keydown", this.handleKeyDown);
-
-    this.authSubscription = firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        const { uid, isAnonymous, email, providerData } = user;
-        this.setState({
-          userID: uid,
-          userName: isAnonymous
-            ? "Guest account"
-            : email || (providerData && JSON.stringify(providerData)),
-          anonymous: isAnonymous,
-        });
-      } else {
-        this.setState({ userID: null, userName: null, anonymous: null }, () =>
-          firebase.auth().signInAnonymously()
-        );
-      }
-    });
   }
 
   componentWillUnmount() {
     document.removeEventListener("keydown", this.handleKeyDown);
-    this.authSubscription();
   }
 
   handleKeyDown = event => {
@@ -63,10 +37,8 @@ class Home extends React.Component {
     }
   };
 
-  signOut = () => firebase.auth().signOut();
-
   render() {
-    const { userID, anonymous, userName } = this.state;
+    const { userID, anonymous, userName, signOut } = this.props;
 
     return (
       <React.Fragment>
@@ -78,13 +50,16 @@ class Home extends React.Component {
                 {anonymous ? (
                   <Link to="authenticate">Sign in/Sign up</Link>
                 ) : (
-                  <button
-                    type="button"
-                    className="underlined"
-                    onClick={this.signOut}
-                  >
-                    Sign out
-                  </button>
+                  <React.Fragment>
+                    <Link to="/import">Import data</Link>
+                    <button
+                      type="button"
+                      className="underlined"
+                      onClick={signOut}
+                    >
+                      Sign out
+                    </button>
+                  </React.Fragment>
                 )}
               </React.Fragment>
             ) : (

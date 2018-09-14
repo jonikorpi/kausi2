@@ -2,19 +2,20 @@ import React from "react";
 import Loadable from "react-loadable";
 import { Router, Link } from "@reach/router";
 
+import Account from "../components/Account";
 import Home from "../components/Home";
 
 const Loading = ({ error, pastDelay }) =>
   pastDelay || error ? (
-    <React.Fragment>
+    <div className="section">
       {error ? (
         <pre>
           <code>{error.message}</code>
         </pre>
       ) : (
-        "Loading authentication…"
+        "Loading…"
       )}
-    </React.Fragment>
+    </div>
   ) : null;
 
 const Authentication = Loadable({
@@ -23,13 +24,24 @@ const Authentication = Loadable({
   timeout: 30000,
 });
 
+const ImportData = Loadable({
+  loader: () => import("../components/ImportData"),
+  loading: Loading,
+  timeout: 30000,
+});
+
 class App extends React.Component {
   render() {
     return (
-      <Router>
-        <Home path="/" />
-        <Authentication path="authenticate/*" />
-      </Router>
+      <Account>
+        {account => (
+          <Router>
+            <Home path="/" {...account} />
+            <Authentication path="authenticate/*" {...account} />
+            <ImportData path="import/*" {...account} />
+          </Router>
+        )}
+      </Account>
     );
   }
 }
