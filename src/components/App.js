@@ -24,8 +24,8 @@ const Authentication = Loadable({
   timeout: 30000,
 });
 
-const ImportData = Loadable({
-  loader: () => import("../components/ImportData"),
+const Import = Loadable({
+  loader: () => import("./Import"),
   loading: Loading,
   timeout: 30000,
 });
@@ -38,7 +38,7 @@ class App extends React.Component {
           <Router>
             <Home path="/" {...account} />
             <Authentication path="authenticate/*" {...account} />
-            <ImportData path="import/*" {...account} />
+            <Import path="import/*" {...account} />
           </Router>
         )}
       </Account>

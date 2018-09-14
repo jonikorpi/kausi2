@@ -2,12 +2,12 @@ import React, { Fragment } from "react";
 import { Link, navigate } from "@reach/router";
 import { format } from "date-fns/esm";
 
-import { Header, Footer } from "../components/App";
+import { Header, Footer } from "./App";
 
 import firestore from "../utilities/firestore";
 import { list } from "postcss";
 
-class Authentication extends React.Component {
+class Import extends React.Component {
   state = { log: null };
 
   handleSubmit = async event => {
@@ -197,4 +197,4 @@ class Authentication extends React.Component {
   }
 }
 
-export default Authentication;
+export default Import;
