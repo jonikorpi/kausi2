@@ -24,7 +24,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "deploy": "yarn build && now ./build --name kausi"
+    "deploy": "yarn build && now && now alias"
   },
   "browserslist": {
     "development": [">1%", "last 4 versions", "Firefox ESR", "not ie < 11"],

@@ -1,0 +1,10 @@
+{
+  "alias": "kausi.now.sh",
+  "name": "kausi",
+  "files": ["./build"],
+  "type": "static",
+  "static": {
+    "public": "./build",
+    "rewrites": [{ "source": "**", "destination": "/index.html" }]
+  }
+}
