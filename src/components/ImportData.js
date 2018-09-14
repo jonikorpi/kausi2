@@ -21,13 +21,19 @@ class Authentication extends React.Component {
         JSON.parse(event.nativeEvent.target.elements["importData"].value)
       ).filter(entry => entry !== null && typeof entry === "object");
 
+      if (!data || data.length === 0) {
+        this.setState({ log: "Could not detect any data to import." });
+        return;
+      }
+
       // omg I hate my past self
       const calendar = data.filter(
         entry =>
           typeof entry.date === "number" && format(entry.date, "YYYY") > 1970
       );
       const monthly = data.filter(
-        entry => +entry.date <= 31 && +entry.date > 0
+        entry =>
+          typeof entry.date === "string" && +entry.date <= 31 && +entry.date > 0
       );
       const weekly = data.filter(
         entry => typeof entry.date === "string" && entry.date.length > 2
@@ -39,43 +45,51 @@ class Authentication extends React.Component {
       );
 
       const user = firestore.collection("users").doc(userID);
-      const updates = firestore.batch();
       const now = Date.now();
 
-      monthly.forEach(entry =>
-        updates.set(
-          user
-            .collection("repeating")
-            .doc(entry.date < 10 ? `0${entry.date}` : `${entry.date}`),
-          {
+      if (monthly.length + weekly.length + lists.length > 0) {
+        const updates = firestore.batch();
+
+        monthly.forEach(entry =>
+          updates.set(
+            user
+              .collection("repeating")
+              .doc(entry.date < 10 ? `0${entry.date}` : `${entry.date}`),
+            {
+              value: entry.text
+                .split(/\r?\n/g)
+                .map(line => "#monthly " + line)
+                .join("\n"),
+              time: now,
+            }
+          )
+        );
+        weekly.forEach(entry =>
+          updates.set(user.collection("repeating").doc(entry.date), {
             value: entry.text
               .split(/\r?\n/g)
-              .map(line => "#monthly " + line)
+              .map(line => "#weekly " + line)
               .join("\n"),
             time: now,
-          }
-        )
-      );
-      weekly.forEach(entry =>
-        updates.set(user.collection("repeating").doc(entry.date), {
-          value: entry.text
-            .split(/\r?\n/g)
-            .map(line => "#weekly " + line)
-            .join("\n"),
-          time: now,
-        })
-      );
-      lists.forEach((entry, index) =>
-        updates.set(user.collection("lists").doc(`${index}`), {
-          value: entry.text.split(/\r?\n/g).join("\n"),
-          time: now,
-        })
-      );
+          })
+        );
+        lists.forEach((entry, index) =>
+          updates.set(user.collection("lists").doc(`${index}`), {
+            value: entry.text.split(/\r?\n/g).join("\n"),
+            time: now,
+          })
+        );
 
-      await updates.commit();
-      this.setState({
-        log: this.state.log + "\nImported monthlies, weeklies, and lists…",
-      });
+        await updates.commit();
+        this.setState({
+          log:
+            this.state.log +
+            `\nImported ${monthly.length} monthlies, ${
+              weekly.length
+            } weeklies, and  ${lists.length} lists…` +
+            (calendar.length > 0 ? "" : "\nImport successful!"),
+        });
+      }
 
       if (calendar.length > 0) {
         const calendarChunks = calendar.reduce((all, one, i) => {
